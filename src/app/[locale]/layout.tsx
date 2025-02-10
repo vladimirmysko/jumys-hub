@@ -1,15 +1,16 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
+import { clsx } from 'clsx';
 import { getScopedI18n } from '@/locales/server';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
+import { Theme } from '@radix-ui/themes';
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+const inter = Inter({
+  subsets: ['latin', 'cyrillic'],
+  display: 'swap',
+  variable: '--font-inter',
+  weight: 'variable',
+  axes: ['opsz'],
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -33,10 +34,18 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} style={{ scrollBehavior: 'smooth' }}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable}`}
+        className={clsx(inter.variable)}
         style={{ textRendering: 'optimizeLegibility' }}
       >
-        {children}
+        <Theme
+          accentColor="gray"
+          grayColor="gray"
+          radius="medium"
+          scaling="100%"
+          panelBackground="solid"
+        >
+          {children}
+        </Theme>
       </body>
     </html>
   );
