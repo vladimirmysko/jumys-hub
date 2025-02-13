@@ -3,6 +3,84 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_DIRECT_URL")
+}
+
+enum Role {
+  student
+  employer
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String   @map("password_hash")
+  role         Role
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  studentProfile  StudentProfile?
+  employerProfile EmployerProfile?
+
+  @@map("users")
+}
+
+model StudentProfile {
+  id         String   @id @default(uuid())
+  userId     String   @unique @map("user_id")
+  fullName   String?  @map("full_name")
+  bio        String?
+  resumeLink String?  @map("resume_link")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  user         User          @relation(fields: [userId], references: [id])
+  applications Application[]
+
+  @@map("student_profiles")
+}
+
+model EmployerProfile {
+  id          String   @id @default(uuid())
+  userId      String   @unique @map("user_id")
+  companyName String   @map("company_name")
+  description String?
+  website     String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user User  @relation(fields: [userId], references: [id])
+  jobs Job[]
+
+  @@map("employer_profiles")
+}
+
+model Job {
+  id          String   @id @default(uuid())
+  employerId  String   @map("employer_id")
+  title       String
+  description String?
+  location    String?
+  postedAt    DateTime @default(now()) @map("posted_at")
+
+  employer     EmployerProfile @relation(fields: [employerId], references: [id])
+  applications Application[]
+
+  @@map("jobs")
+}
+
+model Application {
+  id        String   @id @default(uuid())
+  jobId     String   @map("job_id")
+  studentId String   @map("student_id")
+  appliedAt DateTime @default(now()) @map("applied_at")
+  status    String   @default("pending")
+
+  job     Job            @relation(fields: [jobId], references: [id])
+  student StudentProfile @relation(fields: [studentId], references: [id])
+
+  @@unique([jobId, studentId])
+  @@map("applications")
 }
