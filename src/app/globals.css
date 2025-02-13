@@ -23,4 +23,8 @@ body {
   --default-font-family: var(--font-inter);
 
   --font-weight-bold: 600;
+
+  --color-background: var(--gray-1);
+  --color-surface: var(--color-background);
+  --color-panel-solid: var(--color-background);
 }
