@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  username     String    @unique
+  email        String?
+  password     String
+  firstName    String?   @map("first_name")
+  lastName     String?   @map("last_name")
+  profileImage String?   @map("profile_image")
+  phoneNumber  String?   @map("phone_number")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  student      Student?
+  employer     Employer?
+
+  @@map("users")
+}
+
+model Student {
+  id             String        @id @default(cuid()) @map("student_id")
+  userId         String        @unique @map("user_id")
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  university     String?
+  fieldOfStudy   String?       @map("field_of_study")
+  graduationYear Int?          @map("graduation_year")
+  bio            String?       @db.Text
+  resumes        Resume[]
+  applications   Application[]
+
+  @@map("students")
+}
+
+model Employer {
+  id          String  @id @default(cuid()) @map("employer_id")
+  userId      String  @unique @map("user_id")
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName String  @map("company_name")
+  industry    String?
+  website     String?
+  description String? @db.Text
+  location    String?
+  jobs        Job[]
+
+  @@map("employers")
+}
+
+model Job {
+  id                  String        @id @default(cuid()) @map("job_id")
+  title               String
+  description         String        @db.Text
+  location            String
+  salaryMin           Float?        @map("salary_min")
+  salaryMax           Float?        @map("salary_max")
+  jobType             JobType       @default(FULL_TIME) @map("job_type")
+  requiredSkills      Skill[]       @relation("JobToSkill")
+  applicationDeadline DateTime?     @map("application_deadline")
+  employerId          String        @map("employer_id")
+  employer            Employer      @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  applications        Application[]
+  createdAt           DateTime      @default(now()) @map("created_at")
+  updatedAt           DateTime      @updatedAt @map("updated_at")
+
+  @@index([title])
+  @@map("jobs")
+}
+
+model Resume {
+  id          String       @id @default(cuid()) @map("resume_id")
+  title       String
+  summary     String?      @db.Text
+  skills      Skill[]
+  education   Education[]
+  languages   Language[]
+  experiences Experience[]
+  studentId   String       @map("student_id")
+  student     Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  isActive    Boolean      @default(true) @map("is_active")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  @@map("resumes")
+}
+
+model Education {
+  id           String    @id @default(cuid()) @map("education_id")
+  institution  String
+  degree       String?
+  fieldOfStudy String?   @map("field_of_study")
+  startDate    DateTime  @map("start_date")
+  endDate      DateTime? @map("end_date")
+  resumeId     String    @map("resume_id")
+  resume       Resume    @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  @@map("educations")
+}
+
+model Language {
+  id      String        @id @default(cuid()) @map("language_id")
+  name    String
+  level   LanguageLevel
+  resumes Resume[]
+
+  @@unique([name])
+  @@map("languages")
+}
+
+model Skill {
+  id      String   @id @default(cuid()) @map("skill_id")
+  name    String   @unique
+  resumes Resume[]
+  jobs    Job[]    @relation("JobToSkill")
+
+  @@map("skills")
+}
+
+model Experience {
+  id          String    @id @default(cuid()) @map("experience_id")
+  title       String
+  company     String
+  description String    @db.Text
+  startDate   DateTime  @map("start_date")
+  endDate     DateTime? @map("end_date")
+  resumeId    String    @map("resume_id")
+  resume      Resume    @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("experiences")
+}
+
+model Application {
+  id          String            @id @default(cuid()) @map("application_id")
+  jobId       String            @map("job_id")
+  job         Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  studentId   String            @map("student_id")
+  student     Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  status      ApplicationStatus @default(PENDING)
+  coverLetter String?           @map("cover_letter") @db.Text
+  feedback    String?           @db.Text
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+
+  @@map("applications")
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  INTERVIEW
+  REJECTED
+  ACCEPTED
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  TEMPORARY
+  INTERN
+}
+
+enum LanguageLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  FLUENT
+  NATIVE
+}
