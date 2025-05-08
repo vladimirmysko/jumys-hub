@@ -2,16 +2,17 @@
 
 import { useTransition } from 'react'
 
-import { LockClosedIcon, PersonIcon } from '@radix-ui/react-icons'
 import { Button, Flex, Grid, Heading, Link, Text, TextField } from '@radix-ui/themes'
 import type { GridProps } from '@radix-ui/themes'
 
-import { signInAction } from '@/actions/auth/sign-in-action'
-import type { SignInActionInput } from '@/actions/auth/sign-in-action'
+import { LockClosedIcon, PersonIcon } from '@radix-ui/react-icons'
+
+import { useScopedI18n } from '@/locales/client'
 
 import { Logo } from '@/components/logo'
 
-import { useScopedI18n } from '@/locales/client'
+import { signInAction } from '@/actions/auth/sign-in-action'
+import type { SignInActionInput } from '@/actions/auth/sign-in-action'
 
 export function SignInForm(props: Omit<GridProps, 'asChild' | 'children'>) {
   const t = useScopedI18n('sign_in')
@@ -45,7 +46,7 @@ export function SignInForm(props: Omit<GridProps, 'asChild' | 'children'>) {
         <Logo />
 
         <Flex direction="column" align="stretch" gap="2">
-          <Heading weight="medium">{t('title')}</Heading>
+          <Heading>{t('title')}</Heading>
           <Text size="2" color="gray">
             {t('description')}{' '}
             <Link
@@ -61,33 +62,34 @@ export function SignInForm(props: Omit<GridProps, 'asChild' | 'children'>) {
           </Text>
         </Flex>
 
-        <Grid columns="1" gap="2">
-          <Text as="label" htmlFor="username" size="2" weight="medium">
-            {t('username')}
-          </Text>
-          <TextField.Root name="username" id="username" placeholder="john.doe" required size="3">
-            <TextField.Slot>
-              <PersonIcon />
-            </TextField.Slot>
-          </TextField.Root>
-        </Grid>
-
-        <Grid columns="1" gap="2">
-          <Text as="label" htmlFor="password" size="2" weight="medium">
-            {t('password')}
-          </Text>
-          <TextField.Root
-            name="password"
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            required
-            size="3"
-          >
-            <TextField.Slot>
-              <LockClosedIcon />
-            </TextField.Slot>
-          </TextField.Root>
+        <Grid columns="1" gap="5">
+          <Grid columns="1" gap="2">
+            <Text as="label" htmlFor="username" size="2" weight="medium">
+              {t('username')}
+            </Text>
+            <TextField.Root name="username" id="username" placeholder="john.doe" required size="3">
+              <TextField.Slot>
+                <PersonIcon />
+              </TextField.Slot>
+            </TextField.Root>
+          </Grid>
+          <Grid columns="1" gap="2">
+            <Text as="label" htmlFor="password" size="2" weight="medium">
+              {t('password')}
+            </Text>
+            <TextField.Root
+              name="password"
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              required
+              size="3"
+            >
+              <TextField.Slot>
+                <LockClosedIcon />
+              </TextField.Slot>
+            </TextField.Root>
+          </Grid>
         </Grid>
 
         <Button type="submit" size="3" loading={isPending} highContrast>

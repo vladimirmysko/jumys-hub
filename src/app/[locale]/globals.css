@@ -13,7 +13,6 @@ body {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-variation-settings: 'opsz' 32;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,6 +23,7 @@ body {
 
 .radix-themes {
   --default-font-family: var(--font-inter);
+  --font-weight-bold: 600;
 
   --color-background: var(--gray-1);
   --color-panel-solid: var(--gray-2);
