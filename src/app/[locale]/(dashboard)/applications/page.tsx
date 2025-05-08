@@ -7,7 +7,7 @@ import { ApplicationsList, ApplicationsListSkeleton } from '@/components/applica
 export default function ApplicationsPage() {
   return (
     <Flex direction="column" gap="7" pb="8">
-      <Heading size="3" weight="medium">
+      <Heading size="5" weight="medium">
         My Applications
       </Heading>
 

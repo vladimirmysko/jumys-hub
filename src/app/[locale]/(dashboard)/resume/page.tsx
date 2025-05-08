@@ -1,9 +1,12 @@
-import { redirect } from 'next/navigation'
 import NextLink from 'next/link'
+import { redirect } from 'next/navigation'
+
+import { Button, DataList, Flex, Grid, Heading, Text } from '@radix-ui/themes'
+
+import { format } from 'date-fns'
+
 import { prisma } from '@/lib/prisma'
 import { verifySession } from '@/lib/session'
-import { Button, DataList, Flex, Grid, Heading, Text } from '@radix-ui/themes'
-import { format } from 'date-fns'
 
 export default async function ResumePage() {
   const session = await verifySession()
@@ -42,7 +45,7 @@ export default async function ResumePage() {
   if (!resume) {
     return (
       <Flex direction="column" align="start" gap="4">
-        <Heading weight="medium" size="3">
+        <Heading weight="medium" size="5">
           Resume
         </Heading>
         <Text size="2" color="gray">
@@ -58,7 +61,7 @@ export default async function ResumePage() {
   return (
     <Grid gap="7">
       <Flex justify="between" align="center">
-        <Heading size="3" weight="medium">
+        <Heading size="5" weight="medium">
           Resume
         </Heading>
         <Button asChild variant="soft">

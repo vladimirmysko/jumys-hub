@@ -1,4 +1,5 @@
 import NextLink from 'next/link'
+
 import {
   Button,
   DataList,
@@ -10,6 +11,7 @@ import {
   Text,
   TextArea,
 } from '@radix-ui/themes'
+
 import { ChevronLeftIcon } from '@radix-ui/react-icons'
 
 export default function Loading() {
@@ -24,7 +26,7 @@ export default function Loading() {
         </NextLink>
       </Link>
 
-      <Heading weight="medium" size="3">
+      <Heading weight="medium" size="5">
         <Skeleton>Vacancy Title</Skeleton>
       </Heading>
 
@@ -33,6 +35,12 @@ export default function Loading() {
           <DataList.Label>Company</DataList.Label>
           <DataList.Value>
             <Skeleton>Company Name</Skeleton>
+          </DataList.Value>
+        </DataList.Item>
+        <DataList.Item>
+          <DataList.Label>Category</DataList.Label>
+          <DataList.Value>
+            <Skeleton>Category Name</Skeleton>
           </DataList.Value>
         </DataList.Item>
         <DataList.Item>
@@ -82,7 +90,7 @@ export default function Loading() {
           <TextArea id="coverLetter" name="coverLetter" rows={4} disabled />
         </Grid>
 
-        <Flex justify="end">
+        <Flex>
           <Button size="2" disabled>
             Apply Now
           </Button>

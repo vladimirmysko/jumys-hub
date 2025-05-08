@@ -4,7 +4,7 @@ export default function Loading() {
   return (
     <Grid gap="7">
       <Flex justify="between" align="center">
-        <Heading size="3" weight="medium">
+        <Heading size="5" weight="medium">
           Resume
         </Heading>
         <Skeleton>

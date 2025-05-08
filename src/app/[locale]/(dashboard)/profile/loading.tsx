@@ -3,7 +3,7 @@ import { Button, DataList, Flex, Grid, Heading, Skeleton } from '@radix-ui/theme
 export default function Loading() {
   return (
     <Grid gap="7">
-      <Heading size="3" weight="medium">
+      <Heading size="5" weight="medium">
         Profile
       </Heading>
 

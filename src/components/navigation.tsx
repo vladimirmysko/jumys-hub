@@ -26,7 +26,7 @@ export function Navigation(props: Omit<FlexProps, 'children'>) {
             key={link.href}
             size="2"
             underline="hover"
-            weight={isActive ? 'medium' : 'regular'}
+            weight={isActive ? 'bold' : 'regular'}
             highContrast={isActive}
             asChild
           >

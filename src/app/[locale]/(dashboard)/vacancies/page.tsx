@@ -1,12 +1,13 @@
 import { Suspense } from 'react'
+
 import NextLink from 'next/link'
 
-import { prisma } from '@/lib/prisma'
-
 import { Button, Flex, Grid, Heading, Text } from '@radix-ui/themes'
-import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 
+import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 import type { SearchParams } from 'nuqs/server'
+
+import { prisma } from '@/lib/prisma'
 
 import { VacanciesFilters } from '@/components/vacancies/filters'
 import { VacanciesList, VacanciesListSkeleton } from '@/components/vacancies/list'
@@ -33,7 +34,7 @@ export default async function VacanciesPage({ searchParams }: VacanciesPageProps
   return (
     <Grid columns="1" gap="7" pb="8">
       <Flex justify="between" align="center">
-        <Heading size="3" weight="medium">
+        <Heading size="5" weight="medium">
           Vacancies
         </Heading>
 

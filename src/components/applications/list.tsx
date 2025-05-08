@@ -1,11 +1,10 @@
 import { redirect } from 'next/navigation'
 
+import { Flex, Grid, Text } from '@radix-ui/themes'
+import type { GridProps } from '@radix-ui/themes'
+
 import { prisma } from '@/lib/prisma'
 import { getSession } from '@/lib/session'
-
-import { Flex, Grid, Text } from '@radix-ui/themes'
-
-import type { GridProps } from '@radix-ui/themes'
 
 import { ApplicationItem } from '@/components/applications/item'
 
@@ -38,7 +37,11 @@ export async function ApplicationsList(props: GridProps) {
   })
 
   if (applications.length === 0) {
-    return <Text>You have not applied for any vacancies yet.</Text>
+    return (
+      <Text size="2" weight="medium">
+        You have not applied for any vacancies yet.
+      </Text>
+    )
   }
 
   return (

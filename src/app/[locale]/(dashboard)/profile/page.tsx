@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation'
+
+import { Button, DataList, Flex, Grid, Heading } from '@radix-ui/themes'
+
 import { prisma } from '@/lib/prisma'
 import { deleteSession, verifySession } from '@/lib/session'
-import { Button, DataList, Flex, Grid, Heading } from '@radix-ui/themes'
 
 export async function signOut() {
   'use server'
@@ -32,7 +34,7 @@ export default async function ProfilePage() {
 
   return (
     <Grid gap="7">
-      <Heading size="3" weight="medium">
+      <Heading size="5" weight="medium">
         Profile
       </Heading>
 

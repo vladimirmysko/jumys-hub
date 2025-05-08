@@ -1,14 +1,14 @@
-import { redirect } from 'next/navigation'
 import NextLink from 'next/link'
+import { redirect } from 'next/navigation'
+
+import { DataList, Flex, Grid, Heading, Link, Text } from '@radix-ui/themes'
+
+import { CheckCircledIcon, CheckIcon, ChevronLeftIcon } from '@radix-ui/react-icons'
+import { format } from 'date-fns'
 
 import { JOB_TYPE_LABELS } from '@/lib/constants'
 import { prisma } from '@/lib/prisma'
 import { verifySession } from '@/lib/session'
-
-import { DataList, Flex, Grid, Heading, Link, Text } from '@radix-ui/themes'
-import { CheckCircledIcon, CheckIcon, ChevronLeftIcon } from '@radix-ui/react-icons'
-
-import { format } from 'date-fns'
 
 import { ApplicationForm } from '@/components/forms/application-form'
 
@@ -62,7 +62,7 @@ export default async function VacancyPage({ params }: { params: Promise<{ id: st
         </NextLink>
       </Link>
 
-      <Heading weight="medium" size="3">
+      <Heading weight="medium" size="5">
         {vacancy.title}
       </Heading>
 
