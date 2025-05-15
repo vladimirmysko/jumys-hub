@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  EMPLOYER
+  ADMIN
+
+  @@map("roles")
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  INTERNSHIP
+  CONTRACT
+  REMOTE
+
+  @@map("job_types")
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWED
+  INTERVIEW
+  ACCEPTED
+  REJECTED
+
+  @@map("application_statuses")
+}
+
+/// Represents a user account in the system
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique @db.VarChar(50)
+  email     String   @unique @db.VarChar(255)
+  password  String
+  role      Role
+  firstName String?  @map("first_name") @db.VarChar(50)
+  lastName  String?  @map("last_name") @db.VarChar(50)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  student  Student?
+  employer Employer?
+
+  @@index([username])
+  @@index([email])
+  @@map("users")
+}
+
+/// Represents a student who can apply for jobs
+model Student {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Information specific to students
+  university     String? @db.VarChar(100)
+  major          String? @db.VarChar(100)
+  graduationYear Int?    @map("graduation_year")
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique @map("user_id")
+
+  resume       Resume?
+  applications Application[]
+
+  @@map("students")
+}
+
+/// Represents an employer who can post vacancies
+model Employer {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Information specific to employers
+  companyName String  @map("company_name") @db.VarChar(100)
+  industry    String? @db.VarChar(100)
+  website     String? @db.VarChar(255)
+
+  // Relations
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String    @unique @map("user_id")
+  vacancies Vacancy[]
+
+  @@map("employers")
+}
+
+/// Student's resume
+model Resume {
+  id         String   @id @default(uuid())
+  experience String   @db.Text
+  skills     String   @db.Text
+  education  String   @db.Text
+  about      String   @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String  @unique @map("student_id")
+
+  @@map("resumes")
+}
+
+/// Categories for job vacancies
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique @db.VarChar(50)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  vacancies Vacancy[]
+
+  @@map("categories")
+}
+
+/// Job vacancy posted by an employer
+model Vacancy {
+  id          String   @id @default(uuid())
+  title       String   @db.VarChar(100)
+  description String   @db.Text
+  location    String?  @db.VarChar(100)
+  salary      String?  @db.VarChar(50)
+  jobType     JobType  @map("job_type")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  employer     Employer      @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  employerId   String        @map("employer_id")
+  category     Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId   String        @map("category_id")
+  applications Application[]
+
+  @@index([employerId])
+  @@map("vacancies")
+}
+
+/// Job application submitted by a student
+model Application {
+  id          String            @id @default(uuid())
+  status      ApplicationStatus @default(PENDING)
+  coverLetter String?           @map("cover_letter") @db.Text
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+
+  // Relations
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String  @map("student_id")
+  vacancy   Vacancy @relation(fields: [vacancyId], references: [id], onDelete: Cascade)
+  vacancyId String  @map("vacancy_id")
+
+  @@unique([studentId, vacancyId]) // Prevent duplicate applications
+  @@index([studentId])
+  @@index([vacancyId])
+  @@index([status])
+  @@map("applications")
+}

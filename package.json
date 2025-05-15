@@ -6,9 +6,13 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:seed": "node prisma/seed.js"
   },
   "dependencies": {
+    "@prisma/client": "6.7.0",
+    "@radix-ui/themes": "^3.2.1",
+    "bcryptjs": "^3.0.2",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -23,6 +27,7 @@
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.0",
     "prettier": "^3.5.3",
+    "prisma": "^6.7.0",
     "typescript": "^5"
   }
 }
