@@ -19,7 +19,7 @@ export function RegisterForm(props: Omit<GridProps, 'asChild' | 'children'>) {
     defaultValues: {
       username: '',
       email: '',
-      role: 'STUDENT',
+      role: '',
       firstName: '',
       lastName: '',
       university: '',

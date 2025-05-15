@@ -1,13 +1,35 @@
+import { notFound } from 'next/navigation';
+
 import { Container, Flex } from '@radix-ui/themes';
 
 import { Logo } from '@/components/logo';
-import { Navigation } from '@/components/navigation';
+import { NavigationLink } from '@/components/navigation-link';
 
-export default function DashboardLayout({
+import { verifySession } from '@/lib/session';
+import { prisma } from '@/lib/prisma';
+
+export default async function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await verifySession();
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.sub },
+  });
+
+  if (!user) {
+    notFound();
+  }
+
+  const studentLinks = [
+    { label: 'Вакансии', href: '/vacancies' },
+    { label: 'Резюме', href: '/resume' },
+  ];
+  const employerLinks = [{ label: 'Соискатели', href: '/candidates' }];
+  const commonLinks = [{ label: 'Профиль', href: '/profile' }];
+
   return (
     <Flex direction='column' align='stretch' minHeight='100vh'>
       <Container size='4'>
@@ -20,7 +42,26 @@ export default function DashboardLayout({
             style={{ borderBottom: '1px solid var(--gray-a4)' }}
           >
             <Logo />
-            <Navigation />
+
+            <Flex direction='row' align='baseline' gap='5'>
+              {user.role === 'STUDENT' &&
+                studentLinks.map((link) => (
+                  <NavigationLink key={link.href} href={link.href}>
+                    {link.label}
+                  </NavigationLink>
+                ))}
+              {user.role === 'EMPLOYER' &&
+                employerLinks.map((link) => (
+                  <NavigationLink key={link.href} href={link.href}>
+                    {link.label}
+                  </NavigationLink>
+                ))}
+              {commonLinks.map((link) => (
+                <NavigationLink key={link.href} href={link.href}>
+                  {link.label}
+                </NavigationLink>
+              ))}
+            </Flex>
           </Flex>
           {children}
         </Flex>
