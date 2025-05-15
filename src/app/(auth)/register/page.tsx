@@ -1,11 +1,11 @@
 import { Flex } from '@radix-ui/themes';
 
-import { SignInForm } from '@/components/auth/sign-in-form';
+import { RegisterForm } from '@/components/auth/register-form';
 
-export default function SignInPage() {
+export default function RegisterPage() {
   return (
     <Flex direction='column' align='center' justify='center' px='4' py='8' minHeight='100vh'>
-      <SignInForm maxWidth='24rem' width='100%' />
+      <RegisterForm maxWidth='24rem' width='100%' />
     </Flex>
   );
 }

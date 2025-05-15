@@ -15,7 +15,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Платформа для поиска работы студентами и работодателями — Jumys Hub',
+  title: 'Jumys Hub — платформа для поиска работы студентами и работодателями',
   description:
     'Jumys Hub — это платформа для университета, которая помогает студентам находить работу, а работодателям — находить студентов для стажировок и вакансий.',
 };
@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang='ru' className={inter.variable} style={{ scrollBehavior: 'smooth' }}>
       <body style={{ textRendering: 'optimizeLegibility' }}>
-        <Theme accentColor='gray' grayColor='gray' panelBackground='solid' radius='none'>
+        <Theme accentColor='gray' grayColor='gray' panelBackground='solid' radius='medium'>
           {children}
         </Theme>
       </body>

@@ -23,11 +23,28 @@ body {
   --default-font-family: var(--font-inter);
 
   --font-weight-light: 450;
-  --font-weight-regular: 450;
+  --font-weight-regular: 500;
   --font-weight-medium: 600;
   --font-weight-bold: 600;
 
   --color-background: var(--gray-1);
   --color-panel-solid: var(--gray-1);
   --color-surface: var(--gray-1);
+}
+
+.rt-TextFieldInput {
+  font-weight: var(--font-weight-regular);
+}
+
+.rt-TableColumnHeaderCell {
+  font-weight: var(--font-weight-bold);
+}
+
+.rt-TableCell {
+  &:last-child {
+    padding-right: 0;
+  }
+  &:first-child {
+    padding-left: 0;
+  }
 }
