@@ -51,6 +51,8 @@ export async function signInAction(_prevState: unknown, formData: FormData) {
 
     await createSession({ sub: user.id });
   } catch (error) {
+    console.error('Error during sign-in:', error);
+
     if (error instanceof z.ZodError) {
       return {
         defaultValues,

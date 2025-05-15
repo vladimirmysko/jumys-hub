@@ -45,7 +45,7 @@ export function SignInForm(props: Omit<GridProps, 'asChild' | 'children'>) {
             <TextField.Root
               id='username'
               name='username'
-              placeholder='john.doe'
+              placeholder='nurzhan.sadykov'
               disabled={isPending}
               defaultValue={state.defaultValues.username}
               aria-invalid={!!state.errors?.username}
