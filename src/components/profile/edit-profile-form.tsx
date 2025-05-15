@@ -12,8 +12,8 @@ import type { Employer, Student, User } from '@/generated/prisma';
 
 interface EditProfileFormProps extends Omit<GridProps, 'asChild' | 'children'> {
   user: User & {
-    student?: Student;
-    employer?: Employer;
+    student: Student | null;
+    employer: Employer | null;
   };
 }
 

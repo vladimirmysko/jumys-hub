@@ -3,6 +3,8 @@ import NextLink from 'next/link';
 
 import { DataList, Flex, Heading, Link } from '@radix-ui/themes';
 
+import { SignOutButton } from '@/components/profile/sign-out-button';
+
 import { prisma } from '@/lib/prisma';
 import { verifySession } from '@/lib/session';
 import { ROLE_MAPPING } from '@/lib/constants';
@@ -92,6 +94,8 @@ export default async function ProfilePage() {
           </DataList.Item>
         </DataList.Root>
       )}
+
+      <SignOutButton>Выйти из аккаунта</SignOutButton>
     </Flex>
   );
 }

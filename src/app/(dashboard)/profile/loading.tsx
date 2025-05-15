@@ -1,5 +1,7 @@
 import { DataList, Flex, Heading, Link, Skeleton } from '@radix-ui/themes';
 
+import { Button } from '@/components/ui/button';
+
 export default function Loading() {
   return (
     <Flex direction='column' gap='7' py='7'>
@@ -65,6 +67,12 @@ export default function Loading() {
           </DataList.Value>
         </DataList.Item>
       </DataList.Root>
+
+      <Flex>
+        <Skeleton>
+          <Button>Выйти из аккаунта</Button>
+        </Skeleton>
+      </Flex>
     </Flex>
   );
 }
