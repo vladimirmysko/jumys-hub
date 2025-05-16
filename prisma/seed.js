@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Starting seed...');
+  console.log('Запуск заполнения базы данных...');
 
   // Clean up existing data (optional, comment out if you don't want to delete existing data)
   await prisma.application.deleteMany({});
@@ -15,20 +15,20 @@ async function main() {
   await prisma.user.deleteMany({});
   await prisma.category.deleteMany({});
 
-  console.log('Database cleaned');
+  console.log('База данных очищена');
 
   // Create categories
   const categories = [
-    { name: 'Software Development' },
-    { name: 'Data Science & Analytics' },
-    { name: 'Design & UX' },
-    { name: 'Product Management' },
-    { name: 'Marketing & Communications' },
-    { name: 'Network & Infrastructure' },
-    { name: 'Finance & Banking' },
-    { name: 'Customer Support' },
-    { name: 'Business & Management' },
-    { name: 'Aviation & Transportation' },
+    { name: 'Разработка программного обеспечения' },
+    { name: 'Наука о данных и аналитика' },
+    { name: 'Дизайн и UX' },
+    { name: 'Управление продуктом' },
+    { name: 'Маркетинг и коммуникации' },
+    { name: 'Сети и инфраструктура' },
+    { name: 'Финансы и банковское дело' },
+    { name: 'Клиентская поддержка' },
+    { name: 'Бизнес и менеджмент' },
+    { name: 'Авиация и транспорт' },
   ];
 
   const createdCategories = {};
@@ -38,7 +38,7 @@ async function main() {
       data: categoryData,
     });
     createdCategories[categoryData.name] = category.id;
-    console.log(`Created category: ${category.name}`);
+    console.log(`Создана категория: ${category.name}`);
   }
 
   // Create admin user
@@ -53,7 +53,7 @@ async function main() {
       lastName: 'User',
     },
   });
-  console.log(`Created admin user: ${admin.username}`);
+  console.log(`Создан администратор: ${admin.username}`);
 
   // Create student users
   const students = [
@@ -64,7 +64,7 @@ async function main() {
       firstName: 'Aisha',
       lastName: 'Nurpeisova',
       university: 'Nazarbayev University',
-      major: 'Computer Science',
+      major: 'Компьютерные науки',
       graduationYear: 2025,
     },
     {
@@ -74,7 +74,7 @@ async function main() {
       firstName: 'Azamat',
       lastName: 'Tulegenov',
       university: 'KBTU',
-      major: 'Information Systems',
+      major: 'Информационные системы',
       graduationYear: 2024,
     },
     {
@@ -84,7 +84,7 @@ async function main() {
       firstName: 'Elena',
       lastName: 'Kim',
       university: 'AITU',
-      major: 'Software Engineering',
+      major: 'Программная инженерия',
       graduationYear: 2026,
     },
   ];
@@ -111,19 +111,19 @@ async function main() {
         student: true,
       },
     });
-    console.log(`Created student user: ${student.username}`);
+    console.log(`Создан студент: ${student.username}`);
 
     // Create resume for each student
     await prisma.resume.create({
       data: {
         studentId: student.student.id,
-        experience: `Worked as an intern at various companies in ${studentData.major} field.`,
-        skills: `Programming languages, frameworks, problem-solving, teamwork, communication, project management`,
-        education: `Bachelor's degree in ${studentData.major} from ${studentData.university}, expected to graduate in ${studentData.graduationYear}.`,
-        about: `Passionate ${studentData.major} student eager to apply academic knowledge in a professional setting.`,
+        experience: `Проходил стажировку в различных компаниях в области ${studentData.major}.`,
+        skills: `Языки программирования, фреймворки, решение проблем, командная работа, коммуникация, управление проектами`,
+        education: `Степень бакалавра по специальности ${studentData.major} в ${studentData.university}, ожидаемый год выпуска ${studentData.graduationYear}.`,
+        about: `Страстный студент направления ${studentData.major}, стремящийся применить академические знания на практике.`,
       },
     });
-    console.log(`Created resume for: ${student.username}`);
+    console.log(`Создано резюме для: ${student.username}`);
   }
 
   // Create employer users
@@ -176,26 +176,26 @@ async function main() {
         employer: true,
       },
     });
-    console.log(`Created employer user: ${employer.username}`);
+    console.log(`Создан работодатель: ${employer.username}`);
 
     // Create vacancies for each employer
     if (employerData.username === 'kaspi') {
       vacancies.push(
         {
-          title: 'Backend Developer',
+          title: 'Backend-разработчик',
           description:
-            'We are looking for an experienced Backend Developer with knowledge of Java, Spring, and microservices architecture.',
-          location: 'Almaty',
-          salary: '800,000 - 1,200,000 KZT',
+            'Мы ищем опытного Backend-разработчика со знанием Java, Spring и микросервисной архитектуры.',
+          location: 'Алматы',
+          salary: '800 000 - 1 200 000 KZT',
           jobType: JobType.FULL_TIME,
           employerId: employer.employer.id,
         },
         {
-          title: 'DevOps Engineer',
+          title: 'DevOps-инженер',
           description:
-            'Join our DevOps team to manage cloud infrastructure, CI/CD pipelines, and automate deployment processes.',
-          location: 'Almaty',
-          salary: '1,000,000 - 1,500,000 KZT',
+            'Присоединяйтесь к нашей команде DevOps для управления облачной инфраструктурой, CI/CD и автоматизации процессов развертывания.',
+          location: 'Алматы',
+          salary: '1 000 000 - 1 500 000 KZT',
           jobType: JobType.FULL_TIME,
           employerId: employer.employer.id,
         },
@@ -203,20 +203,20 @@ async function main() {
     } else if (employerData.username === 'kolesa') {
       vacancies.push(
         {
-          title: 'Frontend Developer (React)',
+          title: 'Frontend-разработчик (React)',
           description:
-            'Join our team to develop responsive and interactive web applications using React and other modern frontend technologies.',
-          location: 'Almaty',
-          salary: '600,000 - 900,000 KZT',
+            'Присоединяйтесь к нашей команде для разработки адаптивных и интерактивных веб-приложений с использованием React и других современных технологий.',
+          location: 'Алматы',
+          salary: '600 000 - 900 000 KZT',
           jobType: JobType.FULL_TIME,
           employerId: employer.employer.id,
         },
         {
-          title: 'UX/UI Designer Intern',
+          title: 'UX/UI Дизайнер-стажер',
           description:
-            'Great opportunity for design students to gain real-world experience in a fast-paced tech company.',
-          location: 'Almaty',
-          salary: '250,000 - 350,000 KZT',
+            'Отличная возможность для студентов-дизайнеров получить реальный опыт работы в быстроразвивающейся технологической компании.',
+          location: 'Алматы',
+          salary: '250 000 - 350 000 KZT',
           jobType: JobType.INTERNSHIP,
           employerId: employer.employer.id,
         },
@@ -224,20 +224,20 @@ async function main() {
     } else if (employerData.username === 'beeline') {
       vacancies.push(
         {
-          title: 'Data Analyst',
+          title: 'Аналитик данных',
           description:
-            'Looking for a data analyst to help us derive insights from customer data and improve our service offerings.',
-          location: 'Almaty/Remote',
-          salary: '600,000 - 800,000 KZT',
+            'Ищем аналитика данных, который поможет нам извлекать инсайты из данных клиентов и улучшать наши предложения.',
+          location: 'Алматы/Удаленно',
+          salary: '600 000 - 800 000 KZT',
           jobType: JobType.REMOTE,
           employerId: employer.employer.id,
         },
         {
-          title: 'Network Engineer (Part-time)',
+          title: 'Сетевой инженер (Частичная занятость)',
           description:
-            'We need a skilled network engineer to support our infrastructure team on a part-time basis.',
-          location: 'Nur-Sultan',
-          salary: '400,000 - 500,000 KZT',
+            'Нужен опытный сетевой инженер для поддержки нашей инфраструктурной команды на частичной занятости.',
+          location: 'Нур-Султан',
+          salary: '400 000 - 500 000 KZT',
           jobType: JobType.PART_TIME,
           employerId: employer.employer.id,
         },
@@ -294,24 +294,25 @@ async function main() {
         employer: true,
       },
     });
-    console.log(`Created employer user: ${employer.username}`);
+    console.log(`Создан работодатель: ${employer.username}`);
 
     // Add vacancies for new employers
     if (employerData.username === 'airastana') {
       vacancies.push(
         {
-          title: 'Flight Operations Data Analyst',
-          description: 'Analyze flight operations data to optimize routes and improve efficiency.',
-          location: 'Almaty',
-          salary: '700,000 - 900,000 KZT',
+          title: 'Аналитик данных операционных процессов',
+          description:
+            'Анализируйте данные операционных процессов, чтобы оптимизировать маршруты и повышать эффективность.',
+          location: 'Алматы',
+          salary: '700 000 - 900 000 KZT',
           jobType: JobType.FULL_TIME,
           employerId: employer.employer.id,
         },
         {
-          title: 'IT Support Specialist',
-          description: 'Provide technical support for internal systems and staff.',
-          location: 'Nur-Sultan',
-          salary: '500,000 - 650,000 KZT',
+          title: 'Специалист технической поддержки',
+          description: 'Обеспечьте техническую поддержку для внутренних систем и сотрудников.',
+          location: 'Нур-Султан',
+          salary: '500 000 - 650 000 KZT',
           jobType: JobType.FULL_TIME,
           employerId: employer.employer.id,
         },
@@ -319,26 +320,29 @@ async function main() {
     } else if (employerData.username === 'halykbank') {
       vacancies.push(
         {
-          title: 'Mobile App Developer',
-          description: 'Develop and maintain our mobile banking applications for iOS and Android.',
-          location: 'Almaty',
-          salary: '750,000 - 1,100,000 KZT',
+          title: 'Разработчик мобильных приложений',
+          description:
+            'Разрабатывайте и поддерживайте наши мобильные банковские приложения для iOS и Android.',
+          location: 'Алматы',
+          salary: '750 000 - 1 100 000 KZT',
           jobType: JobType.FULL_TIME,
           employerId: employer.employer.id,
         },
         {
-          title: 'Cybersecurity Specialist',
-          description: 'Protect our digital assets and ensure compliance with security standards.',
-          location: 'Almaty',
-          salary: '900,000 - 1,300,000 KZT',
+          title: 'Специалист по кибербезопасности',
+          description:
+            'Защищайте наши цифровые активы и обеспечивайте соответствие стандартам безопасности.',
+          location: 'Алматы',
+          salary: '900 000 - 1 300 000 KZT',
           jobType: JobType.FULL_TIME,
           employerId: employer.employer.id,
         },
         {
-          title: 'Finance Intern',
-          description: 'Learn banking operations and financial analysis in a hands-on environment.',
-          location: 'Nur-Sultan',
-          salary: '200,000 - 300,000 KZT',
+          title: 'Стажер в финансовом отделе',
+          description:
+            'Изучайте банковские операции и финансовый анализ в практической обстановке.',
+          location: 'Нур-Султан',
+          salary: '200 000 - 300 000 KZT',
           jobType: JobType.INTERNSHIP,
           employerId: employer.employer.id,
         },
@@ -346,27 +350,28 @@ async function main() {
     } else if (employerData.username === 'techgarden') {
       vacancies.push(
         {
-          title: 'Startup Mentor',
+          title: 'Наставник стартапов',
           description:
-            'Guide early-stage startups through product development and market fit challenges.',
-          location: 'Remote',
-          salary: '500,000 - 800,000 KZT',
+            'Направляйте стартапы на ранних стадиях через разработку продукта и выход на рынок.',
+          location: 'Удаленно',
+          salary: '500 000 - 800 000 KZT',
           jobType: JobType.PART_TIME,
           employerId: employer.employer.id,
         },
         {
-          title: 'Product Manager',
-          description: 'Lead product development for our accelerator program startups.',
-          location: 'Nur-Sultan',
-          salary: '900,000 - 1,300,000 KZT',
+          title: 'Менеджер по продукту',
+          description:
+            'Возглавьте разработку продукта для стартапов нашей акселерационной программы.',
+          location: 'Нур-Султан',
+          salary: '900 000 - 1 300 000 KZT',
           jobType: JobType.FULL_TIME,
           employerId: employer.employer.id,
         },
         {
-          title: 'Growth Hacker',
-          description: 'Develop and implement growth strategies for our portfolio companies.',
-          location: 'Remote',
-          salary: '700,000 - 900,000 KZT',
+          title: 'Специалист по росту',
+          description: 'Разрабатывайте и внедряйте стратегии роста для наших портфельных компаний.',
+          location: 'Удаленно',
+          salary: '700 000 - 900 000 KZT',
           jobType: JobType.REMOTE,
           employerId: employer.employer.id,
         },
@@ -393,28 +398,28 @@ async function main() {
     if (user.username === 'kaspi') {
       vacancies.push(
         {
-          title: 'Mobile App QA Engineer',
+          title: 'QA-инженер мобильных приложений',
           description:
-            'Ensure the quality of our mobile applications through thorough testing and quality assurance processes.',
-          location: 'Almaty',
-          salary: '600,000 - 850,000 KZT',
+            'Обеспечьте качество наших мобильных приложений через тщательное тестирование и процессы контроля качества.',
+          location: 'Алматы',
+          salary: '600 000 - 850 000 KZT',
           jobType: JobType.FULL_TIME,
           employerId: employer.id,
         },
         {
-          title: 'Product Manager - Payments',
-          description: 'Lead the development and strategy for our payment solutions.',
-          location: 'Almaty',
-          salary: '1,200,000 - 1,800,000 KZT',
+          title: 'Менеджер по продукту - Платежи',
+          description: 'Возглавьте разработку и стратегию наших платежных решений.',
+          location: 'Алматы',
+          salary: '1 200 000 - 1 800 000 KZT',
           jobType: JobType.FULL_TIME,
           employerId: employer.id,
         },
         {
-          title: 'Data Science Intern',
+          title: 'Стажер по Data Science',
           description:
-            'Apply machine learning and statistical analysis to help us make data-driven decisions.',
-          location: 'Almaty',
-          salary: '300,000 - 400,000 KZT',
+            'Применяйте машинное обучение и статистический анализ, чтобы помочь нам принимать решения на основе данных.',
+          location: 'Алматы',
+          salary: '300 000 - 400 000 KZT',
           jobType: JobType.INTERNSHIP,
           employerId: employer.id,
         },
@@ -422,28 +427,29 @@ async function main() {
     } else if (user.username === 'kolesa') {
       vacancies.push(
         {
-          title: 'Backend Developer (Python)',
+          title: 'Backend-разработчик (Python)',
           description:
-            'Develop and maintain backend services using Python, Django, and related technologies.',
-          location: 'Almaty',
-          salary: '700,000 - 1,100,000 KZT',
+            'Разрабатывайте и поддерживайте серверные сервисы с использованием Python, Django и смежных технологий.',
+          location: 'Алматы',
+          salary: '700 000 - 1 100 000 KZT',
           jobType: JobType.FULL_TIME,
           employerId: employer.id,
         },
         {
-          title: 'DevOps Engineer (Remote)',
+          title: 'DevOps-инженер (Удаленно)',
           description:
-            'Manage our cloud infrastructure and improve our CI/CD pipeline from anywhere in Kazakhstan.',
-          location: 'Remote',
-          salary: '900,000 - 1,300,000 KZT',
+            'Управляйте нашей облачной инфраструктурой и улучшайте наш CI/CD процесс из любой точки Казахстана.',
+          location: 'Удаленно',
+          salary: '900 000 - 1 300 000 KZT',
           jobType: JobType.REMOTE,
           employerId: employer.id,
         },
         {
-          title: 'Content Marketing Specialist',
-          description: 'Create engaging content for our digital platforms and marketing campaigns.',
-          location: 'Almaty',
-          salary: '500,000 - 700,000 KZT',
+          title: 'Специалист по контентному маркетингу',
+          description:
+            'Создавайте привлекательный контент для наших цифровых платформ и маркетинговых кампаний.',
+          location: 'Алматы',
+          salary: '500 000 - 700 000 KZT',
           jobType: JobType.CONTRACT,
           employerId: employer.id,
         },
@@ -451,35 +457,36 @@ async function main() {
     } else if (user.username === 'beeline') {
       vacancies.push(
         {
-          title: 'Telecommunications Engineer',
-          description: 'Design and optimize mobile network infrastructure.',
-          location: 'Shymkent',
-          salary: '700,000 - 900,000 KZT',
+          title: 'Инженер-телекоммуникаций',
+          description: 'Проектируйте и оптимизируйте инфраструктуру мобильной сети.',
+          location: 'Шымкент',
+          salary: '700 000 - 900 000 KZT',
           jobType: JobType.FULL_TIME,
           employerId: employer.id,
         },
         {
-          title: 'Digital Marketing Manager',
-          description: 'Lead our digital marketing efforts across all channels.',
-          location: 'Almaty',
-          salary: '800,000 - 1,200,000 KZT',
+          title: 'Менеджер по цифровому маркетингу',
+          description: 'Возглавьте наши усилия в области цифрового маркетинга на всех каналах.',
+          location: 'Алматы',
+          salary: '800 000 - 1 200 000 KZT',
           jobType: JobType.FULL_TIME,
           employerId: employer.id,
         },
         {
-          title: 'Customer Support Specialist (Part-time)',
-          description: 'Provide excellent customer service via phone and digital channels.',
-          location: 'Karaganda',
-          salary: '300,000 - 450,000 KZT',
+          title: 'Специалист по поддержке клиентов (Частичная занятость)',
+          description:
+            'Обеспечьте отличный уровень обслуживания клиентов по телефону и цифровым каналам.',
+          location: 'Караганда',
+          salary: '300 000 - 450 000 KZT',
           jobType: JobType.PART_TIME,
           employerId: employer.id,
         },
         {
-          title: 'IoT Solutions Developer',
+          title: 'Разработчик IoT-решений',
           description:
-            'Develop innovative Internet of Things solutions for our enterprise clients.',
-          location: 'Remote',
-          salary: '900,000 - 1,300,000 KZT',
+            'Разрабатывайте инновационные решения в области Интернета вещей для наших корпоративных клиентов.',
+          location: 'Удаленно',
+          salary: '900 000 - 1 300 000 KZT',
           jobType: JobType.REMOTE,
           employerId: employer.id,
         },
@@ -538,10 +545,10 @@ async function main() {
         categoryId: categoryId,
       },
     });
-    console.log(`Created vacancy: ${vacancy.title}`);
+    console.log(`Создана вакансия: ${vacancy.title}`);
   }
 
-  console.log('Seed completed successfully');
+  console.log('Заполнение базы данных завершено успешно');
 }
 
 main()
