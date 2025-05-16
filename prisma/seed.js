@@ -132,24 +132,24 @@ async function main() {
       username: 'kaspi',
       email: 'careers@kaspi.kz',
       password: 'password123',
-      companyName: 'Kaspi Bank',
-      industry: 'Finance & Technology',
+      companyName: 'Kaspi Банк',
+      industry: 'Финансы и Технологии',
       website: 'https://kaspi.kz',
     },
     {
       username: 'kolesa',
       email: 'hr@kolesa.kz',
       password: 'password123',
-      companyName: 'Kolesa Group',
-      industry: 'Internet & Technology',
+      companyName: 'Колеса Групп',
+      industry: 'Интернет и Технологии',
       website: 'https://kolesa.kz',
     },
     {
       username: 'beeline',
       email: 'jobs@beeline.kz',
       password: 'password123',
-      companyName: 'Beeline Kazakhstan',
-      industry: 'Telecommunications',
+      companyName: 'Билайн Казахстан',
+      industry: 'Телекоммуникации',
       website: 'https://beeline.kz',
     },
   ];
@@ -251,24 +251,24 @@ async function main() {
       username: 'airastana',
       email: 'careers@airastana.com',
       password: 'password123',
-      companyName: 'Air Astana',
-      industry: 'Aviation',
+      companyName: 'Эйр Астана',
+      industry: 'Авиация',
       website: 'https://airastana.com',
     },
     {
       username: 'halykbank',
       email: 'hr@halykbank.kz',
       password: 'password123',
-      companyName: 'Halyk Bank',
-      industry: 'Banking',
+      companyName: 'Народный Банк',
+      industry: 'Банковское дело',
       website: 'https://halykbank.kz',
     },
     {
       username: 'techgarden',
       email: 'jobs@techgarden.kz',
       password: 'password123',
-      companyName: 'Astana Hub',
-      industry: 'Technology',
+      companyName: 'Астана Хаб',
+      industry: 'Технологии',
       website: 'https://astanahub.com',
     },
   ];
@@ -415,7 +415,7 @@ async function main() {
           employerId: employer.id,
         },
         {
-          title: 'Стажер по Data Science',
+          title: 'Стажер по науке о данных',
           description:
             'Применяйте машинное обучение и статистический анализ, чтобы помочь нам принимать решения на основе данных.',
           location: 'Алматы',
@@ -500,43 +500,50 @@ async function main() {
     let categoryId = null;
 
     if (
-      vacancyData.title.includes('Developer') ||
+      vacancyData.title.includes('разработчик') ||
       vacancyData.title.includes('DevOps') ||
-      vacancyData.title.includes('QA Engineer')
+      vacancyData.title.includes('QA') ||
+      vacancyData.title.includes('инженер')
     ) {
-      categoryId = createdCategories['Software Development'];
-    } else if (vacancyData.title.includes('Data') || vacancyData.title.includes('Analytics')) {
-      categoryId = createdCategories['Data Science & Analytics'];
+      categoryId = createdCategories['Разработка программного обеспечения'];
     } else if (
-      vacancyData.title.includes('Designer') ||
+      vacancyData.title.includes('данных') ||
+      vacancyData.title.includes('аналитик') ||
+      vacancyData.title.includes('наука о данных')
+    ) {
+      categoryId = createdCategories['Наука о данных и аналитика'];
+    } else if (
+      vacancyData.title.includes('Дизайнер') ||
+      vacancyData.title.includes('дизайнер') ||
       vacancyData.title.includes('UX') ||
       vacancyData.title.includes('UI')
     ) {
-      categoryId = createdCategories['Design & UX'];
+      categoryId = createdCategories['Дизайн и UX'];
     } else if (
-      vacancyData.title.includes('Product Manager') ||
-      vacancyData.title.includes('Product')
+      vacancyData.title.includes('Менеджер по продукту') ||
+      vacancyData.title.includes('менеджер по продукту')
     ) {
-      categoryId = createdCategories['Product Management'];
-    } else if (vacancyData.title.includes('Marketing') || vacancyData.title.includes('Content')) {
-      categoryId = createdCategories['Marketing & Communications'];
+      categoryId = createdCategories['Управление продуктом'];
+    } else if (vacancyData.title.includes('маркетинг') || vacancyData.title.includes('контент')) {
+      categoryId = createdCategories['Маркетинг и коммуникации'];
     } else if (
-      vacancyData.title.includes('Network') ||
-      vacancyData.title.includes('Infrastructure') ||
-      vacancyData.title.includes('IT Support')
+      vacancyData.title.includes('Сеть') ||
+      vacancyData.title.includes('сеть') ||
+      vacancyData.title.includes('инфраструктура') ||
+      vacancyData.title.includes('телекоммуникаций')
     ) {
-      categoryId = createdCategories['Network & Infrastructure'];
-    } else if (vacancyData.title.includes('Finance') || vacancyData.title.includes('Banking')) {
-      categoryId = createdCategories['Finance & Banking'];
-    } else if (vacancyData.title.includes('Support') || vacancyData.title.includes('Customer')) {
-      categoryId = createdCategories['Customer Support'];
-    } else if (vacancyData.title.includes('Operations') || vacancyData.title.includes('Mentor')) {
-      categoryId = createdCategories['Business & Management'];
-    } else if (vacancyData.title.includes('Flight')) {
-      categoryId = createdCategories['Aviation & Transportation'];
+      categoryId = createdCategories['Сети и инфраструктура'];
+    } else if (vacancyData.title.includes('финанс') || vacancyData.title.includes('банк')) {
+      categoryId = createdCategories['Финансы и банковское дело'];
+    } else if (vacancyData.title.includes('поддержка') || vacancyData.title.includes('клиент')) {
+      categoryId = createdCategories['Клиентская поддержка'];
+    } else if (vacancyData.title.includes('менеджер') || vacancyData.title.includes('наставник')) {
+      categoryId = createdCategories['Бизнес и менеджмент'];
+    } else if (vacancyData.title.includes('авиа') || vacancyData.title.includes('транспорт')) {
+      categoryId = createdCategories['Авиация и транспорт'];
     } else {
       // Default category for anything else
-      categoryId = createdCategories['Business & Management'];
+      categoryId = createdCategories['Бизнес и менеджмент'];
     }
 
     const vacancy = await prisma.vacancy.create({

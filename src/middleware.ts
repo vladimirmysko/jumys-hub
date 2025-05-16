@@ -5,7 +5,7 @@ import { SESSION_COOKIE_NAME, SIGN_IN_PATH, decrypt } from '@/lib/session';
 
 const SUCCESS_REDIRECT_PATH = '/profile';
 
-const protectedRoutes = ['/profile', '/resume', 'vacancies'];
+const protectedRoutes = ['/profile', '/resume', '/vacancies'];
 const publicRoutes = ['/sign-in', '/register', '/'];
 
 export default async function middleware(req: NextRequest) {

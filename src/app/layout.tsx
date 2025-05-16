@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
 import { Theme } from '@radix-ui/themes';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 import '@radix-ui/themes/styles.css';
 import './globals.css';
@@ -28,9 +29,11 @@ export default function RootLayout({
   return (
     <html lang='ru' className={inter.variable} style={{ scrollBehavior: 'smooth' }}>
       <body style={{ textRendering: 'optimizeLegibility' }}>
-        <Theme accentColor='gray' grayColor='gray' panelBackground='solid' radius='medium'>
-          {children}
-        </Theme>
+        <NuqsAdapter>
+          <Theme accentColor='gray' grayColor='gray' panelBackground='solid' radius='medium'>
+            {children}
+          </Theme>
+        </NuqsAdapter>
       </body>
     </html>
   );

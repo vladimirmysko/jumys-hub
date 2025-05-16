@@ -7,7 +7,7 @@ import { SignOutButton } from '@/components/profile/sign-out-button';
 
 import { prisma } from '@/lib/prisma';
 import { verifySession } from '@/lib/session';
-import { ROLE_MAPPING } from '@/lib/constants';
+import { ROLE_LABELS } from '@/lib/constants';
 
 export default async function ProfilePage() {
   const session = await verifySession();
@@ -49,7 +49,7 @@ export default async function ProfilePage() {
         </DataList.Item>
         <DataList.Item>
           <DataList.Label>Роль</DataList.Label>
-          <DataList.Value>{ROLE_MAPPING[user.role]}</DataList.Value>
+          <DataList.Value>{ROLE_LABELS[user.role]}</DataList.Value>
         </DataList.Item>
         <DataList.Item>
           <DataList.Label>Аккаунт создан</DataList.Label>

@@ -1,16 +1,16 @@
 html,
 body {
-  padding: 0;
-  margin: 0;
   max-width: 100vw;
   overflow-x: hidden;
   box-sizing: border-box;
 }
 
 * {
+  padding: 0;
+  margin: 0;
+  font-variation-settings: "opsz" 32;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-variation-settings: "opsz" 32;
 }
 
 @media (prefers-color-scheme: dark) {
