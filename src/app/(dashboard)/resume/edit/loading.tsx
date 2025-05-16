@@ -1,28 +1,11 @@
-import { notFound } from 'next/navigation';
 import NextLink from 'next/link';
 
-import { Flex, Heading, Link } from '@radix-ui/themes';
 import { ChevronLeftIcon } from '@radix-ui/react-icons';
+import { Flex, Heading, Link } from '@radix-ui/themes';
 
-import { EditResumeForm } from '@/components/resume/edit-resume-form';
+import { ResumeFormSkeleton } from '@/components/resume/resume-form-skeleton';
 
-import { prisma } from '@/lib/prisma';
-import { verifySession } from '@/lib/session';
-
-export default async function EditResumePage() {
-  const session = await verifySession();
-  const resume = await prisma.resume.findFirst({
-    where: {
-      student: {
-        userId: session.sub,
-      },
-    },
-  });
-
-  if (!resume) {
-    notFound();
-  }
-
+export default function Loading() {
   return (
     <Flex direction='column' align='stretch' gap='7' py='7'>
       <Link
@@ -44,7 +27,7 @@ export default async function EditResumePage() {
 
       <Heading>Редактировать резюме</Heading>
 
-      <EditResumeForm resume={resume} />
+      <ResumeFormSkeleton />
     </Flex>
   );
 }
