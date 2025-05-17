@@ -5,6 +5,7 @@ import { Badge, Flex, Grid, Link, Text } from '@radix-ui/themes';
 import { loadSearchParams } from '@/components/vacancies/search-params';
 import { Pagination } from '@/components/ui/pagination';
 
+import { verifySession } from '@/lib/session';
 import { prisma } from '@/lib/prisma';
 import { JOB_TYPE_LABELS } from '@/lib/constants';
 
@@ -19,6 +20,8 @@ export async function VacanciesList({
   searchParams,
   ...props
 }: VacanciesListProps & Omit<GridProps, 'asChild' | 'children'>) {
+  const session = await verifySession();
+
   const { page, perPage, category, search, orderBy } = await loadSearchParams(searchParams);
 
   const where = {
@@ -40,6 +43,13 @@ export async function VacanciesList({
   const vacancies = await prisma.vacancy.findMany({
     where,
     include: {
+      applications: {
+        where: {
+          student: {
+            userId: session.sub,
+          },
+        },
+      },
       employer: {
         include: {
           user: {
@@ -88,13 +98,16 @@ export async function VacanciesList({
                   borderBottom: index === vacancies.length - 1 ? 'none' : '1px solid var(--gray-4)',
                 }}
               >
-                <Link size='2' underline='hover' weight='medium' highContrast asChild>
-                  <NextLink
-                    href={`/vacancies/${vacancy.id}?backUrl=${encodeURIComponent(backUrl)}`}
-                  >
-                    {vacancy.title}
-                  </NextLink>
-                </Link>
+                <Flex direction='row' gap='3' align='baseline'>
+                  <Link size='2' underline='hover' weight='medium' highContrast asChild>
+                    <NextLink
+                      href={`/vacancies/${vacancy.id}?backUrl=${encodeURIComponent(backUrl)}`}
+                    >
+                      {vacancy.title}
+                    </NextLink>
+                  </Link>
+                  {vacancy.applications.length > 0 && <Badge color='green'>Заявка подана</Badge>}
+                </Flex>
 
                 <Text size='2' color='gray'>
                   {vacancy.employer.companyName}
@@ -112,7 +125,7 @@ export async function VacanciesList({
                     </Badge>
                   )}
                   {vacancy.salary && (
-                    <Badge color='green' variant='soft'>
+                    <Badge color='gold' variant='soft'>
                       {vacancy.salary}
                     </Badge>
                   )}

@@ -1,9 +1,12 @@
 import { notFound } from 'next/navigation';
 import NextLink from 'next/link';
 
-import { ChevronLeftIcon } from '@radix-ui/react-icons';
+import { ArrowTopRightIcon, ChevronLeftIcon } from '@radix-ui/react-icons';
 import { DataList, Flex, Heading, Link } from '@radix-ui/themes';
 
+import { ApplyForVacancyForm } from '@/components/vacancies/apply-for-vacancy-form';
+
+import { verifySession } from '@/lib/session';
 import { prisma } from '@/lib/prisma';
 import { JOB_TYPE_LABELS } from '@/lib/constants';
 
@@ -17,23 +20,37 @@ interface VacancyPageProps {
 }
 
 export default async function VacancyPage({ params, searchParams }: VacancyPageProps) {
+  const session = await verifySession();
+
   const [{ id }, { backUrl }] = await Promise.all([params, searchParams]);
+  const [vacancy, student, application] = await Promise.all([
+    prisma.vacancy.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        employer: true,
+        category: true,
+      },
+    }),
+    prisma.student.findFirst({
+      where: {
+        userId: session.sub,
+      },
+    }),
+    prisma.application.findFirst({
+      where: {
+        vacancyId: id,
+        student: {
+          userId: session.sub,
+        },
+      },
+    }),
+  ]);
 
-  const vacancy = await prisma.vacancy.findFirst({
-    where: {
-      id,
-    },
-    include: {
-      employer: true,
-      category: true,
-    },
-  });
-
-  if (!vacancy) {
+  if (!vacancy || !student) {
     notFound();
   }
-
-  console.log(backUrl);
 
   return (
     <Flex direction='column' gap='7' py='7'>
@@ -54,7 +71,24 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
         </NextLink>
       </Link>
 
-      <Heading>{vacancy.title}</Heading>
+      <Flex
+        direction='row'
+        align={{ initial: 'start', md: 'baseline' }}
+        wrap='wrap-reverse'
+        gap={{ initial: '2', md: '4' }}
+      >
+        <Heading>{vacancy.title}</Heading>
+        {application && (
+          <Link size='2' color='green' weight='medium' underline='hover' asChild>
+            <NextLink href={`/applications/${application.id}`}>
+              <Flex direction='row' align='center' gap='1'>
+                Заявка отправлена
+                <ArrowTopRightIcon />
+              </Flex>
+            </NextLink>
+          </Link>
+        )}
+      </Flex>
 
       <DataList.Root>
         <DataList.Item>
@@ -94,6 +128,8 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
           </DataList.Value>
         </DataList.Item>
       </DataList.Root>
+
+      {!application && <ApplyForVacancyForm vacancyId={vacancy.id} studentId={student.id} />}
     </Flex>
   );
 }

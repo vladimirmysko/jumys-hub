@@ -7,6 +7,7 @@ import { SelectCategory } from '@/components/vacancies/select-category';
 import { SelectOrderBy } from '@/components/vacancies/select-order-by';
 import { VacanciesList } from '@/components/vacancies/vacancies-list';
 import { VacanciesListSkeleton } from '@/components/vacancies/vacancies-list-skeleton';
+import { loadSearchParams } from '@/components/vacancies/search-params';
 
 import { prisma } from '@/lib/prisma';
 
@@ -17,6 +18,8 @@ interface VacanciesPageProps {
 }
 
 export default async function VacanciesPage({ searchParams }: VacanciesPageProps) {
+  const { category } = await loadSearchParams(searchParams);
+
   const categories = await prisma.category.findMany({
     orderBy: {
       name: 'asc',
@@ -37,7 +40,7 @@ export default async function VacanciesPage({ searchParams }: VacanciesPageProps
         <SelectOrderBy />
       </Flex>
 
-      <Suspense fallback={<VacanciesListSkeleton />}>
+      <Suspense key={category} fallback={<VacanciesListSkeleton />}>
         <VacanciesList searchParams={searchParams} />
       </Suspense>
     </Flex>
