@@ -32,7 +32,8 @@ body {
   --color-surface: var(--gray-1);
 }
 
-.rt-TextFieldInput {
+.rt-TextFieldInput,
+.rt-TextAreaInput {
   font-weight: var(--font-weight-regular);
 }
 
