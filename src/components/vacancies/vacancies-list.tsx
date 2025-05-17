@@ -59,6 +59,16 @@ export async function VacanciesList({
     take: perPage,
   });
 
+  const currentSearchParams = new URLSearchParams();
+  currentSearchParams.set('page', page.toString());
+  currentSearchParams.set('perPage', perPage.toString());
+  currentSearchParams.set('category', category);
+  if (search) {
+    currentSearchParams.set('search', search);
+  }
+  currentSearchParams.set('orderBy', orderBy);
+  const backUrl = `/vacancies?${currentSearchParams.toString()}`;
+
   return (
     <Grid columns='1' gap='7' {...props}>
       <Grid columns='1' asChild>
@@ -79,7 +89,11 @@ export async function VacanciesList({
                 }}
               >
                 <Link size='2' underline='hover' weight='medium' highContrast asChild>
-                  <NextLink href={`/vacancies/${vacancy.id}`}>{vacancy.title}</NextLink>
+                  <NextLink
+                    href={`/vacancies/${vacancy.id}?backUrl=${encodeURIComponent(backUrl)}`}
+                  >
+                    {vacancy.title}
+                  </NextLink>
                 </Link>
 
                 <Text size='2' color='gray'>

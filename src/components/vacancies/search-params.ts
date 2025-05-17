@@ -1,6 +1,6 @@
 import { createLoader, parseAsInteger, parseAsString, parseAsStringEnum } from 'nuqs/server';
 
-export const coordinatesSearchParams = {
+export const vacanciesSearchParams = {
   page: parseAsInteger.withDefault(1),
   perPage: parseAsInteger.withDefault(10),
   category: parseAsString.withDefault('all').withOptions({ clearOnDefault: true }),
@@ -10,4 +10,4 @@ export const coordinatesSearchParams = {
     .withOptions({ clearOnDefault: true }),
 };
 
-export const loadSearchParams = createLoader(coordinatesSearchParams);
+export const loadSearchParams = createLoader(vacanciesSearchParams);
