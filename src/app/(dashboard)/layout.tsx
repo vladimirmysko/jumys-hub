@@ -26,7 +26,7 @@ export default async function DashboardLayout({
   const studentLinks = [
     { label: 'Вакансии', href: '/vacancies' },
     { label: 'Резюме', href: '/resume' },
-    { label: 'Заявки', href: '/applications' },
+    { label: 'Отклики', href: '/applications' },
   ];
   const employerLinks = [{ label: 'Соискатели', href: '/candidates' }];
   const commonLinks = [{ label: 'Профиль', href: '/profile' }];

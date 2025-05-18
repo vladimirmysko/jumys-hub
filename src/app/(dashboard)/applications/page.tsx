@@ -2,13 +2,16 @@ import { Flex, Heading } from '@radix-ui/themes';
 
 import { verifySession } from '@/lib/session';
 import { prisma } from '@/lib/prisma';
+import { ApplicationsList } from '@/components/applications/applications-list';
 
 export default async function ApplicationsPage() {
   const session = await verifySession();
 
   const applications = await prisma.application.findMany({
     where: {
-      studentId: session.sub,
+      student: {
+        userId: session.sub,
+      },
     },
     include: {
       vacancy: {
@@ -17,11 +20,15 @@ export default async function ApplicationsPage() {
         },
       },
     },
+    orderBy: {
+      createdAt: 'desc',
+    },
   });
 
   return (
     <Flex direction='column' gap='7' py='7'>
-      <Heading>Заявки на вакансии</Heading>
+      <Heading>Отклики на вакансии</Heading>
+      <ApplicationsList applications={applications} />
     </Flex>
   );
 }

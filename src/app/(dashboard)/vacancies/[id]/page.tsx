@@ -90,7 +90,7 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
         )}
       </Flex>
 
-      <DataList.Root>
+      <DataList.Root orientation={{ initial: 'vertical', md: 'horizontal' }}>
         <DataList.Item>
           <DataList.Label>Работодатель</DataList.Label>
           <DataList.Value>{vacancy.employer.companyName}</DataList.Value>
