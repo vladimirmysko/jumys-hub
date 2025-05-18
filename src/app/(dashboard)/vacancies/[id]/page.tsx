@@ -5,6 +5,7 @@ import { ArrowTopRightIcon, ChevronLeftIcon } from '@radix-ui/react-icons';
 import { DataList, Flex, Heading, Link } from '@radix-ui/themes';
 
 import { ApplyForVacancyForm } from '@/components/vacancies/apply-for-vacancy-form';
+import { DeleteVacancyAlert } from '@/components/vacancies/delete-vacancy-alert';
 
 import { verifySession } from '@/lib/session';
 import { prisma } from '@/lib/prisma';
@@ -23,6 +24,18 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
   const session = await verifySession();
 
   const [{ id }, { backUrl }] = await Promise.all([params, searchParams]);
+
+  // Determine if user is an employer and if they own this vacancy
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.sub,
+    },
+    include: {
+      employer: true,
+    },
+  });
+
+  const isEmployer = user?.role === 'EMPLOYER';
   const [vacancy, student, application] = await Promise.all([
     prisma.vacancy.findFirst({
       where: {
@@ -48,9 +61,15 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
     }),
   ]);
 
-  if (!vacancy || !student) {
+  if (!vacancy) {
     notFound();
   }
+
+  // Check if the current employer is the owner of this vacancy
+  const isOwner = isEmployer && user?.employer?.id === vacancy.employerId;
+
+  // Students need to have a profile to apply
+  const canApply = !isEmployer && student && !application;
 
   return (
     <Flex direction='column' gap='7' py='7'>
@@ -129,7 +148,10 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
         </DataList.Item>
       </DataList.Root>
 
-      {!application && <ApplyForVacancyForm vacancyId={vacancy.id} studentId={student.id} />}
+      {canApply && <ApplyForVacancyForm vacancyId={vacancy.id} studentId={student.id} />}
+
+      {/* Show delete button for vacancy owner */}
+      {isOwner && <DeleteVacancyAlert vacancyId={vacancy.id} />}
     </Flex>
   );
 }

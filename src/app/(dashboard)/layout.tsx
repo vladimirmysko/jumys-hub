@@ -24,12 +24,14 @@ export default async function DashboardLayout({
   }
 
   const studentLinks = [
-    { label: 'Вакансии', href: '/vacancies' },
     { label: 'Резюме', href: '/resume' },
     { label: 'Отклики', href: '/applications' },
   ];
   const employerLinks = [{ label: 'Соискатели', href: '/candidates' }];
-  const commonLinks = [{ label: 'Профиль', href: '/profile' }];
+  const commonLinks = [
+    { label: 'Вакансии', href: '/vacancies' },
+    { label: 'Профиль', href: '/profile' },
+  ];
 
   return (
     <Flex direction='column' align='stretch' minHeight='100vh'>

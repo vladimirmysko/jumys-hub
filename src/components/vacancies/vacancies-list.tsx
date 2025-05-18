@@ -14,16 +14,32 @@ import type { SearchParams } from 'nuqs';
 
 interface VacanciesListProps {
   searchParams: Promise<SearchParams>;
+  employerOnly?: boolean;
 }
 
 export async function VacanciesList({
   searchParams,
+  employerOnly = false,
   ...props
 }: VacanciesListProps & Omit<GridProps, 'asChild' | 'children'>) {
   const session = await verifySession();
 
   const { page, perPage, category, search, orderBy } = await loadSearchParams(searchParams);
 
+  // Fetch the user to determine if they are an employer
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.sub,
+    },
+    include: {
+      employer: true,
+    },
+  });
+
+  const isEmployer = user?.role === 'EMPLOYER';
+  const employerId = user?.employer?.id;
+
+  // Base filter conditions
   const where = {
     ...(category !== 'all' ? { categoryId: category } : {}),
     ...(search
@@ -35,6 +51,8 @@ export async function VacanciesList({
           ],
         }
       : {}),
+    // If employerOnly is true and user is an employer, filter by employer ID
+    ...(employerOnly && isEmployer && employerId ? { employerId } : {}),
   };
 
   const totalVacancies = await prisma.vacancy.count({ where });
@@ -78,6 +96,18 @@ export async function VacanciesList({
   }
   currentSearchParams.set('orderBy', orderBy);
   const backUrl = `/vacancies?${currentSearchParams.toString()}`;
+
+  if (vacancies.length === 0) {
+    return (
+      <Flex direction='column' align='center' gap='3' py='9'>
+        <Text size='4' weight='medium'>
+          {employerOnly && isEmployer
+            ? 'У вас пока нет опубликованных вакансий'
+            : 'Вакансии не найдены'}
+        </Text>
+      </Flex>
+    );
+  }
 
   return (
     <Grid columns='1' gap='7' {...props}>

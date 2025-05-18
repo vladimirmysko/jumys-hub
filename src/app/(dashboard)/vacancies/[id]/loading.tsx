@@ -1,9 +1,9 @@
+'use client';
+
 import NextLink from 'next/link';
 
-import { ChevronLeftIcon } from '@radix-ui/react-icons';
-import { DataList, Flex, Heading, Link, Skeleton } from '@radix-ui/themes';
-
-import { Button } from '@/components/ui/button';
+import { ChevronLeftIcon, TrashIcon } from '@radix-ui/react-icons';
+import { Button, DataList, Flex, Heading, Link, Skeleton } from '@radix-ui/themes';
 
 export default function Loading() {
   return (
@@ -81,9 +81,18 @@ export default function Loading() {
         </DataList.Item>
       </DataList.Root>
 
-      <Skeleton>
-        <Button>Откликнуться на вакансию</Button>
-      </Skeleton>
+      <Flex gap='4'>
+        <Skeleton>
+          <Button>Откликнуться на вакансию</Button>
+        </Skeleton>
+
+        <Skeleton>
+          <Button color='red' variant='soft'>
+            <TrashIcon width='16' height='16' />
+            Удалить вакансию
+          </Button>
+        </Skeleton>
+      </Flex>
     </Flex>
   );
 }
