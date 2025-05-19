@@ -151,7 +151,7 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
       {canApply && <ApplyForVacancyForm vacancyId={vacancy.id} studentId={student.id} />}
 
       {/* Show delete button for vacancy owner */}
-      {isOwner && <DeleteVacancyAlert vacancyId={vacancy.id} />}
+      {isOwner && <DeleteVacancyAlert vacancyId={vacancy.id} style={{ alignSelf: 'flex-start' }} />}
     </Flex>
   );
 }

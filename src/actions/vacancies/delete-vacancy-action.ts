@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 import { z } from 'zod';
 
@@ -42,8 +42,6 @@ export async function deleteVacancyAction(_prevState: unknown, formData: FormDat
         id: data.id,
       },
     });
-
-    revalidatePath('/vacancies');
   } catch (error) {
     console.error('Error deleting vacancy:', error);
 
@@ -74,5 +72,5 @@ export async function deleteVacancyAction(_prevState: unknown, formData: FormDat
     };
   }
 
-  return { success: true };
+  redirect('/vacancies');
 }
