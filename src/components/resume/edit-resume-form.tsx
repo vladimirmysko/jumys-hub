@@ -2,24 +2,26 @@
 
 import { useActionState } from 'react';
 
-import { Button, Flex, Grid, Text, TextArea } from '@radix-ui/themes';
+import { Button, Flex, Grid, Text, TextArea, Select } from '@radix-ui/themes';
 import type { GridProps } from '@radix-ui/themes';
 
 import { editResumeAction } from '@/actions/resume/edit-resume-action';
 
-import type { Resume } from '@/generated/prisma';
+import type { Resume, Category } from '@/generated/prisma';
 
 interface EditResumeFormProps extends Omit<GridProps, 'asChild' | 'children'> {
   resume: Resume;
+  categories: Category[];
 }
 
-export function EditResumeForm({ resume, ...props }: EditResumeFormProps) {
+export function EditResumeForm({ resume, categories, ...props }: EditResumeFormProps) {
   const [state, formAction, isPending] = useActionState(editResumeAction, {
     defaultValues: {
       experience: resume.experience,
       skills: resume.skills,
       education: resume.education,
       about: resume.about,
+      categoryId: resume.categoryId,
     },
     success: false,
     errors: null,
@@ -51,6 +53,7 @@ export function EditResumeForm({ resume, ...props }: EditResumeFormProps) {
               autoFocus
               required
               rows={4}
+              size='3'
             />
             {state.errors?.experience && (
               <Text id='error-experience' size='1' color='red'>
@@ -72,6 +75,7 @@ export function EditResumeForm({ resume, ...props }: EditResumeFormProps) {
               aria-errormessage='error-skills'
               required
               rows={4}
+              size='3'
             />
             {state.errors?.skills && (
               <Text id='error-skills' size='1' color='red'>
@@ -93,6 +97,7 @@ export function EditResumeForm({ resume, ...props }: EditResumeFormProps) {
               aria-errormessage='error-education'
               required
               rows={4}
+              size='3'
             />
             {state.errors?.education && (
               <Text id='error-education' size='1' color='red'>
@@ -114,10 +119,46 @@ export function EditResumeForm({ resume, ...props }: EditResumeFormProps) {
               aria-errormessage='error-about'
               required
               rows={4}
+              size='3'
             />
             {state.errors?.about && (
               <Text id='error-about' size='1' color='red'>
                 {state.errors.about}
+              </Text>
+            )}
+          </Grid>
+          <Grid columns='1' gap='2'>
+            <Text
+              as='label'
+              htmlFor='categoryId'
+              size='2'
+              color='gray'
+              weight='medium'
+              highContrast
+            >
+              Категория
+            </Text>
+            <Select.Root
+              name='categoryId'
+              defaultValue={state.defaultValues.categoryId}
+              disabled={isPending}
+              required
+              aria-invalid={!!state.errors?.categoryId}
+              aria-errormessage='error-categoryId'
+              size='3'
+            >
+              <Select.Trigger placeholder='Выберите категорию' />
+              <Select.Content>
+                {categories.map((category) => (
+                  <Select.Item key={category.id} value={category.id}>
+                    {category.name}
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Root>
+            {state.errors?.categoryId && (
+              <Text id='error-categoryId' size='1' color='red'>
+                {state.errors.categoryId}
               </Text>
             )}
           </Grid>

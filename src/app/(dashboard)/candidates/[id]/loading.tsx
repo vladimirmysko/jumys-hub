@@ -88,6 +88,12 @@ export default function Loading() {
             <Skeleton>Информация о кандидате</Skeleton>
           </DataList.Value>
         </DataList.Item>
+        <DataList.Item>
+          <DataList.Label>Категория</DataList.Label>
+          <DataList.Value>
+            <Skeleton>Категория</Skeleton>
+          </DataList.Value>
+        </DataList.Item>
       </DataList.Root>
     </Flex>
   );

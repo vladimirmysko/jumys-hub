@@ -33,7 +33,9 @@ export default async function CandidatePage({ params, searchParams }: CandidateP
           createdAt: true,
         },
       },
-      resume: true,
+      resume: {
+        include: { category: true },
+      },
     },
   });
 
@@ -111,6 +113,10 @@ export default async function CandidatePage({ params, searchParams }: CandidateP
           <DataList.Item>
             <DataList.Label>О себе</DataList.Label>
             <DataList.Value>{student.resume.about}</DataList.Value>
+          </DataList.Item>
+          <DataList.Item>
+            <DataList.Label>Категория</DataList.Label>
+            <DataList.Value>{student.resume.category.name}</DataList.Value>
           </DataList.Item>
         </DataList.Root>
       )}

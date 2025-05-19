@@ -16,6 +16,13 @@ export default async function ResumePage() {
         userId: session.sub,
       },
     },
+    include: {
+      category: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
 
   if (!resume) {
@@ -53,6 +60,10 @@ export default async function ResumePage() {
         <DataList.Item>
           <DataList.Label>О себе</DataList.Label>
           <DataList.Value>{resume.about}</DataList.Value>
+        </DataList.Item>
+        <DataList.Item>
+          <DataList.Label>Категория</DataList.Label>
+          <DataList.Value>{resume.category.name}</DataList.Value>
         </DataList.Item>
       </DataList.Root>
 

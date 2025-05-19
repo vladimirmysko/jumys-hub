@@ -23,6 +23,13 @@ export default async function EditResumePage() {
     notFound();
   }
 
+  // Fetch categories
+  const categories = await prisma.category.findMany({
+    orderBy: {
+      name: 'asc',
+    },
+  });
+
   return (
     <Flex direction='column' align='stretch' gap='7' py='7'>
       <Link
@@ -44,7 +51,7 @@ export default async function EditResumePage() {
 
       <Heading>Редактировать резюме</Heading>
 
-      <EditResumeForm resume={resume} />
+      <EditResumeForm resume={resume} categories={categories} />
     </Flex>
   );
 }

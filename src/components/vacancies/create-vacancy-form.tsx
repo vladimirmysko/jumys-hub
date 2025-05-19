@@ -51,7 +51,7 @@ export function CreateVacancyForm({ employerId, categories, ...props }: CreateVa
               defaultValue={state.defaultValues.title}
               aria-invalid={!!state.errors?.title}
               aria-errormessage='error-title'
-              size={{ initial: '3', md: '2' }}
+              size='3'
             />
             {state.errors?.title && (
               <Text id='error-title' size='1' color='red'>
@@ -76,7 +76,7 @@ export function CreateVacancyForm({ employerId, categories, ...props }: CreateVa
               defaultValue={state.defaultValues.categoryId || categories[0]?.id}
               disabled={isPending}
               aria-invalid={!!state.errors?.categoryId}
-              size={{ initial: '3', md: '2' }}
+              size='3'
             >
               <Select.Trigger />
               <Select.Content>
@@ -114,7 +114,7 @@ export function CreateVacancyForm({ employerId, categories, ...props }: CreateVa
               aria-invalid={!!state.errors?.description}
               aria-errormessage='error-description'
               rows={5}
-              size={{ initial: '3', md: '2' }}
+              size='3'
             />
             {state.errors?.description && (
               <Text id='error-description' size='1' color='red'>
@@ -135,7 +135,7 @@ export function CreateVacancyForm({ employerId, categories, ...props }: CreateVa
               defaultValue={state.defaultValues.location}
               aria-invalid={!!state.errors?.location}
               aria-errormessage='error-location'
-              size={{ initial: '3', md: '2' }}
+              size='3'
             />
             {state.errors?.location && (
               <Text id='error-location' size='1' color='red'>
@@ -156,7 +156,7 @@ export function CreateVacancyForm({ employerId, categories, ...props }: CreateVa
               defaultValue={state.defaultValues.salary}
               aria-invalid={!!state.errors?.salary}
               aria-errormessage='error-salary'
-              size={{ initial: '3', md: '2' }}
+              size='3'
             />
             {state.errors?.salary && (
               <Text id='error-salary' size='1' color='red'>
@@ -174,7 +174,7 @@ export function CreateVacancyForm({ employerId, categories, ...props }: CreateVa
               defaultValue={state.defaultValues.jobType || 'FULL_TIME'}
               disabled={isPending}
               aria-invalid={!!state.errors?.jobType}
-              size={{ initial: '3', md: '2' }}
+              size='3'
             >
               <Select.Trigger />
               <Select.Content>
@@ -193,17 +193,17 @@ export function CreateVacancyForm({ employerId, categories, ...props }: CreateVa
           </Grid>
 
           <input type='hidden' name='employerId' value={employerId} />
-
-          <Button
-            type='submit'
-            loading={isPending}
-            size='3'
-            highContrast
-            style={{ alignSelf: 'flex-end' }}
-          >
-            Опубликовать вакансию
-          </Button>
         </Grid>
+
+        <Button
+          type='submit'
+          loading={isPending}
+          size='3'
+          highContrast
+          style={{ alignSelf: 'flex-end' }}
+        >
+          Опубликовать вакансию
+        </Button>
       </form>
     </Flex>
   );

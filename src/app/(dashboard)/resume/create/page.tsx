@@ -4,10 +4,18 @@ import { ChevronLeftIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, Link } from '@radix-ui/themes';
 
 import { CreateResumeForm } from '@/components/resume/create-resume-form';
+import { prisma } from '@/lib/prisma';
 import { verifySession } from '@/lib/session';
 
 export default async function CreateResumePage() {
   const session = await verifySession();
+
+  // Fetch categories
+  const categories = await prisma.category.findMany({
+    orderBy: {
+      name: 'asc',
+    },
+  });
 
   return (
     <Flex direction='column' align='stretch' gap='7' py='7'>
@@ -32,7 +40,7 @@ export default async function CreateResumePage() {
 
       <Heading>Создать резюме</Heading>
 
-      <CreateResumeForm userId={session.sub || ''} />
+      <CreateResumeForm userId={session.sub || ''} categories={categories} />
     </Flex>
   );
 }

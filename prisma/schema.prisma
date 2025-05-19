@@ -107,19 +107,24 @@ model Resume {
   updatedAt  DateTime @updatedAt @map("updated_at")
 
   // Relations
-  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  studentId String  @unique @map("student_id")
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId  String   @unique @map("student_id")
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String   @map("category_id")
 
+  @@index([categoryId])
   @@map("resumes")
 }
 
 /// Categories for job vacancies
 model Category {
-  id        String    @id @default(uuid())
-  name      String    @unique @db.VarChar(50)
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
+  id        String   @id @default(uuid())
+  name      String   @unique @db.VarChar(50)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
   vacancies Vacancy[]
+  resumes   Resume[]
 
   @@map("categories")
 }

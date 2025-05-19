@@ -114,6 +114,26 @@ async function main() {
     console.log(`Создан студент: ${student.username}`);
 
     // Create resume for each student
+    // Assign a category based on student major
+    let categoryId = null;
+
+    if (
+      studentData.major.includes('Компьютерные науки') ||
+      studentData.major.includes('Программная инженерия') ||
+      studentData.major.includes('Информационные системы')
+    ) {
+      categoryId = createdCategories['Разработка программного обеспечения'];
+    } else if (studentData.major.includes('Маркетинг')) {
+      categoryId = createdCategories['Маркетинг и коммуникации'];
+    } else if (studentData.major.includes('Дизайн')) {
+      categoryId = createdCategories['Дизайн и UX'];
+    } else if (studentData.major.includes('Финансы')) {
+      categoryId = createdCategories['Финансы и банковское дело'];
+    } else {
+      // Default category
+      categoryId = createdCategories['Разработка программного обеспечения'];
+    }
+
     await prisma.resume.create({
       data: {
         studentId: student.student.id,
@@ -121,6 +141,7 @@ async function main() {
         skills: `Языки программирования, фреймворки, решение проблем, командная работа, коммуникация, управление проектами`,
         education: `Степень бакалавра по специальности ${studentData.major} в ${studentData.university}, ожидаемый год выпуска ${studentData.graduationYear}.`,
         about: `Страстный студент направления ${studentData.major}, стремящийся применить академические знания на практике.`,
+        categoryId: categoryId,
       },
     });
     console.log(`Создано резюме для: ${student.username}`);

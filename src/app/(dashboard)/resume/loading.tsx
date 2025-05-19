@@ -45,6 +45,12 @@ export default function Loading() {
             <Skeleton>Информация о пользователе</Skeleton>
           </DataList.Value>
         </DataList.Item>
+        <DataList.Item>
+          <DataList.Label>Категория</DataList.Label>
+          <DataList.Value>
+            <Skeleton>Информация о категории</Skeleton>
+          </DataList.Value>
+        </DataList.Item>
       </DataList.Root>
 
       <Flex>

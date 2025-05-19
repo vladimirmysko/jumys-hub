@@ -12,6 +12,7 @@ const createResumeFormSchema = z.object({
   skills: z.string(),
   education: z.string(),
   about: z.string(),
+  categoryId: z.string(),
 });
 
 const SUCCESS_REDIRECT_URL = '/resume';
@@ -50,6 +51,11 @@ export async function createResumeAction(_prevState: unknown, formData: FormData
         student: {
           connect: {
             userId: data.userId,
+          },
+        },
+        category: {
+          connect: {
+            id: data.categoryId,
           },
         },
       },

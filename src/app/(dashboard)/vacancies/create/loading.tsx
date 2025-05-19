@@ -47,7 +47,7 @@ export default function Loading() {
         <Grid columns='1' gap='5'>
           <Grid columns='1' gap='2'>
             <Skeleton>
-              <Text as='label' size='2' color='gray' weight='medium' highContrast>
+              <Text as='label' size='2' color='gray' weight='medium'>
                 Заголовок вакансии*
               </Text>
             </Skeleton>
@@ -61,7 +61,7 @@ export default function Loading() {
 
           <Grid columns='1' gap='2'>
             <Skeleton>
-              <Text as='label' size='2' color='gray' weight='medium' highContrast>
+              <Text as='label' size='2' color='gray' weight='medium'>
                 Категория*
               </Text>
             </Skeleton>
@@ -74,7 +74,7 @@ export default function Loading() {
 
           <Grid columns='1' gap='2'>
             <Skeleton>
-              <Text as='label' size='2' color='gray' weight='medium' highContrast>
+              <Text as='label' size='2' color='gray' weight='medium'>
                 Описание вакансии*
               </Text>
             </Skeleton>
@@ -89,7 +89,7 @@ export default function Loading() {
 
           <Grid columns='1' gap='2'>
             <Skeleton>
-              <Text as='label' size='2' color='gray' weight='medium' highContrast>
+              <Text as='label' size='2' color='gray' weight='medium'>
                 Местоположение
               </Text>
             </Skeleton>
@@ -103,7 +103,7 @@ export default function Loading() {
 
           <Grid columns='1' gap='2'>
             <Skeleton>
-              <Text as='label' size='2' color='gray' weight='medium' highContrast>
+              <Text as='label' size='2' color='gray' weight='medium'>
                 Зарплата
               </Text>
             </Skeleton>
@@ -117,7 +117,7 @@ export default function Loading() {
 
           <Grid columns='1' gap='2'>
             <Skeleton>
-              <Text as='label' size='2' color='gray' weight='medium' highContrast>
+              <Text as='label' size='2' color='gray' weight='medium'>
                 Тип занятости*
               </Text>
             </Skeleton>
@@ -127,13 +127,13 @@ export default function Loading() {
               </Select.Root>
             </Skeleton>
           </Grid>
-
-          <Skeleton>
-            <Button size='3' highContrast style={{ alignSelf: 'flex-end' }}>
-              Опубликовать вакансию
-            </Button>
-          </Skeleton>
         </Grid>
+
+        <Skeleton>
+          <Button size='3' highContrast style={{ alignSelf: 'flex-end' }}>
+            Опубликовать вакансию
+          </Button>
+        </Skeleton>
       </Flex>
     </Flex>
   );

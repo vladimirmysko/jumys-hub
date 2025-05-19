@@ -12,6 +12,7 @@ const editResumeFormSchema = z.object({
   skills: z.string(),
   education: z.string(),
   about: z.string(),
+  categoryId: z.string(),
 });
 
 const SUCCESS_REDIRECT_URL = '/resume';
@@ -48,6 +49,7 @@ export async function editResumeAction(_prevState: unknown, formData: FormData) 
         skills: data.skills,
         education: data.education,
         about: data.about,
+        categoryId: data.categoryId,
       },
     });
   } catch (error) {

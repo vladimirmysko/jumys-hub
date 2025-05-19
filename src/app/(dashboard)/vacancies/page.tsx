@@ -6,7 +6,7 @@ import { PlusIcon } from '@radix-ui/react-icons';
 
 import { Button } from '@/components/ui/button';
 import { Search } from '@/components/search';
-import { SelectCategory } from '@/components/vacancies/select-category';
+import { SelectCategory } from '@/components/select-category';
 import { SelectOrderBy } from '@/components/vacancies/select-order-by';
 import { VacanciesList } from '@/components/vacancies/vacancies-list';
 import { VacanciesListSkeleton } from '@/components/vacancies/vacancies-list-skeleton';

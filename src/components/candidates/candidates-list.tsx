@@ -19,9 +19,10 @@ export async function CandidatesList({
   searchParams,
   ...props
 }: CandidatesListProps & Omit<GridProps, 'asChild' | 'children'>) {
-  const { page, perPage, search } = await loadSearchParams(searchParams);
+  const { page, perPage, category, search } = await loadSearchParams(searchParams);
 
   const where = {
+    ...(category !== 'all' ? { resume: { categoryId: category } } : {}),
     ...(search
       ? {
           OR: [
@@ -33,6 +34,9 @@ export async function CandidatesList({
         }
       : {}),
   };
+
+  console.log('category', category !== 'all' ? { resume: { categoryId: category } } : {});
+  console.log('where', where);
 
   const totalStudents = await prisma.student.count({ where });
   const totalPages = Math.ceil(totalStudents / perPage);
@@ -63,7 +67,7 @@ export async function CandidatesList({
     return (
       <Flex direction='column' align='center' gap='3' py='9'>
         <Text size='4' weight='medium'>
-          Кандидаты не найдены
+          Кандидаты с резюме не найдены
         </Text>
       </Flex>
     );
