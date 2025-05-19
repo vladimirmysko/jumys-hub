@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import NextLink from 'next/link';
 
 import { ArrowTopRightIcon, ChevronLeftIcon } from '@radix-ui/react-icons';
-import { DataList, Flex, Heading, Link } from '@radix-ui/themes';
+import { Badge, DataList, Flex, Grid, Heading, Link, Text } from '@radix-ui/themes';
 
 import { ApplyForVacancyForm } from '@/components/vacancies/apply-for-vacancy-form';
 import { DeleteVacancyAlert } from '@/components/vacancies/delete-vacancy-alert';
@@ -35,8 +35,11 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
       employer: true,
     },
   });
-
   const isEmployer = user?.role === 'EMPLOYER';
+
+  // Get potential employerId before vacancy query
+  const employerId = user?.employer?.id;
+
   const [vacancy, student, application, review] = await Promise.all([
     prisma.vacancy.findFirst({
       where: {
@@ -73,9 +76,32 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
   if (!vacancy) {
     notFound();
   }
-
   // Check if the current employer is the owner of this vacancy
-  const isOwner = isEmployer && user?.employer?.id === vacancy.employerId;
+  const isOwner = isEmployer && employerId === vacancy.employerId;
+
+  // Get all applications for this vacancy if the current user is the owner
+  const applications = isOwner
+    ? await prisma.application.findMany({
+        where: {
+          vacancyId: id,
+        },
+        include: {
+          student: {
+            include: {
+              user: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                },
+              },
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      })
+    : [];
 
   // Students need to have a profile to apply
   const canApply = !isEmployer && student && !application;
@@ -98,7 +124,6 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
           </Flex>
         </NextLink>
       </Link>
-
       <Flex
         direction='row'
         align={{ initial: 'start', md: 'baseline' }}
@@ -117,7 +142,6 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
           </Link>
         )}
       </Flex>
-
       <DataList.Root orientation={{ initial: 'vertical', md: 'horizontal' }}>
         <DataList.Item>
           <DataList.Label>Работодатель</DataList.Label>
@@ -167,10 +191,82 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
             </DataList.Value>
           </DataList.Item>
         )}
-      </DataList.Root>
+      </DataList.Root>{' '}
+      {canApply && <ApplyForVacancyForm vacancyId={vacancy.id} studentId={student.id} />}{' '}
+      {/* Show applications list for vacancy owner */}{' '}
+      {isOwner && (
+        <Flex direction='column' gap='3'>
+          <Heading size='4'>
+            Отклики на вакансию {applications.length > 0 ? `(${applications.length})` : ''}
+          </Heading>
 
-      {canApply && <ApplyForVacancyForm vacancyId={vacancy.id} studentId={student.id} />}
-
+          {applications.length > 0 ? (
+            <Grid columns='1' asChild>
+              <ul>
+                {applications.map((application, index) => (
+                  <Flex
+                    key={application.id}
+                    direction='column'
+                    align='start'
+                    gap='3'
+                    pt={index === 0 ? '0' : '5'}
+                    pb={index === applications.length - 1 ? '0' : '5'}
+                    asChild
+                  >
+                    <li
+                      style={{
+                        borderBottom:
+                          index === applications.length - 1 ? 'none' : '1px solid var(--gray-4)',
+                        width: '100%',
+                      }}
+                    >
+                      <Flex
+                        direction='row'
+                        justify='between'
+                        align='start'
+                        style={{ width: '100%' }}
+                      >
+                        <Flex direction='column' gap='2'>
+                          <Text size='2' weight='medium' highContrast>
+                            {application.student.user.firstName} {application.student.user.lastName}
+                          </Text>
+                          <Badge color='gray' variant='soft'>
+                            {application.status}
+                          </Badge>
+                          {application.coverLetter && (
+                            <Text size='2'>
+                              {application.coverLetter.length > 150
+                                ? application.coverLetter.substring(0, 150) + '...'
+                                : application.coverLetter}
+                            </Text>
+                          )}
+                          <Text size='1' color='gray'>
+                            {application.createdAt.toLocaleDateString('ru-RU', {
+                              dateStyle: 'long',
+                            })}
+                          </Text>
+                        </Flex>
+                        <Link asChild>
+                          <NextLink href={`/applications/${application.id}`}>
+                            <Flex align='center' gap='1'>
+                              <Text size='2'>Просмотреть</Text>
+                              <ArrowTopRightIcon />
+                            </Flex>
+                          </NextLink>
+                        </Link>
+                      </Flex>
+                    </li>
+                  </Flex>
+                ))}
+              </ul>
+            </Grid>
+          ) : (
+            <Text size='2' color='gray'>
+              На данную вакансию еще не поступило откликов.
+            </Text>
+          )}
+        </Flex>
+      )}
       {/* Show delete button for vacancy owner */}
       {isOwner && <DeleteVacancyAlert vacancyId={vacancy.id} style={{ alignSelf: 'flex-start' }} />}
     </Flex>

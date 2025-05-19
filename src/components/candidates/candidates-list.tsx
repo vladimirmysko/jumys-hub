@@ -22,7 +22,7 @@ export async function CandidatesList({
   const { page, perPage, category, search } = await loadSearchParams(searchParams);
 
   const where = {
-    ...(category !== 'all' ? { resume: { categoryId: category } } : {}),
+    ...(category !== 'all' ? { resume: { categoryId: category } } : { resume: { isNot: null } }),
     ...(search
       ? {
           OR: [

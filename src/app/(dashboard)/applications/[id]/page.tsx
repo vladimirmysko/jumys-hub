@@ -7,6 +7,7 @@ import { Badge, DataList, Flex, Heading, Link } from '@radix-ui/themes';
 import { verifySession } from '@/lib/session';
 import { prisma } from '@/lib/prisma';
 import { DeleteApplicationAlert } from '@/components/applications/delete-application-alert';
+import { UpdateApplicationStatus } from '@/components/applications/update-application-status';
 
 interface ApplicationPageProps {
   params: {
@@ -17,14 +18,39 @@ interface ApplicationPageProps {
 export default async function ApplicationPage({ params }: ApplicationPageProps) {
   const session = await verifySession();
 
+  // Get user role and employer information
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.sub,
+    },
+    include: {
+      employer: true,
+    },
+  });
+
+  const isEmployer = user?.role === 'EMPLOYER';
+  const employerId = user?.employer?.id;
+
+  // Query for application based on role
   const application = await prisma.application.findFirst({
     where: {
       id: params.id,
-      student: {
-        userId: session.sub,
+      vacancy: {
+        employerId: isEmployer ? employerId : undefined,
       },
     },
     include: {
+      student: {
+        include: {
+          user: {
+            select: {
+              firstName: true,
+              lastName: true,
+              email: true,
+            },
+          },
+        },
+      },
       vacancy: {
         include: {
           employer: true,
@@ -38,6 +64,12 @@ export default async function ApplicationPage({ params }: ApplicationPageProps) 
     notFound();
   }
 
+  // Determine the back URL based on role
+  const backUrl = isEmployer ? `/vacancies/${application.vacancy.id}` : '/applications';
+
+  // Determine the back button text based on role
+  const backText = isEmployer ? 'Вернуться к вакансии' : 'Все отклики';
+
   return (
     <Flex direction='column' align='start' gap='7' py='7'>
       <Link
@@ -49,10 +81,10 @@ export default async function ApplicationPage({ params }: ApplicationPageProps) 
         asChild
         style={{ alignSelf: 'start' }}
       >
-        <NextLink href='/applications'>
+        <NextLink href={backUrl}>
           <Flex direction='row' align='center' gap='1'>
             <ChevronLeftIcon />
-            Все отклики
+            {backText}
           </Flex>
         </NextLink>
       </Link>
@@ -71,6 +103,20 @@ export default async function ApplicationPage({ params }: ApplicationPageProps) 
       </Flex>
 
       <DataList.Root orientation={{ initial: 'vertical', md: 'horizontal' }}>
+        {isEmployer && (
+          <DataList.Item>
+            <DataList.Label>Соискатель</DataList.Label>
+            <DataList.Value>
+              {application.student.user.firstName} {application.student.user.lastName}
+            </DataList.Value>
+          </DataList.Item>
+        )}
+        {isEmployer && (
+          <DataList.Item>
+            <DataList.Label>Email соискателя</DataList.Label>
+            <DataList.Value>{application.student.user.email}</DataList.Value>
+          </DataList.Item>
+        )}
         <DataList.Item>
           <DataList.Label>Работодатель</DataList.Label>
           <DataList.Value>{application.vacancy.employer.companyName}</DataList.Value>
@@ -106,10 +152,19 @@ export default async function ApplicationPage({ params }: ApplicationPageProps) 
           <DataList.Value>
             {application.createdAt.toLocaleDateString('ru-RU', { dateStyle: 'long' })}
           </DataList.Value>
-        </DataList.Item>
+        </DataList.Item>{' '}
       </DataList.Root>
 
-      <DeleteApplicationAlert applicationId={application.id} />
+      {/* Employer can update the application status */}
+      {isEmployer && (
+        <UpdateApplicationStatus
+          applicationId={application.id}
+          currentStatus={application.status as 'PENDING' | 'ACCEPTED' | 'REJECTED'}
+        />
+      )}
+
+      {/* Only students can delete their applications */}
+      {!isEmployer && <DeleteApplicationAlert applicationId={application.id} />}
     </Flex>
   );
 }
