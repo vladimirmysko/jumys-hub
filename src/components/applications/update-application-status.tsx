@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 
 import { CheckIcon, Cross2Icon, ReloadIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Text } from '@radix-ui/themes';
@@ -16,14 +16,14 @@ export function UpdateApplicationStatus({
   applicationId,
   currentStatus,
 }: UpdateApplicationStatusProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
   const [error, setError] = useState<string | null>(null);
 
   async function updateApplicationStatus(status: 'PENDING' | 'ACCEPTED' | 'REJECTED') {
-    setIsLoading(true);
     setError(null);
 
-    try {
+    startTransition(async () => {
       const result = await updateApplicationStatusAction({
         applicationId,
         status,
@@ -32,11 +32,7 @@ export function UpdateApplicationStatus({
       if (!result.success) {
         setError(result.error || 'Не удалось обновить статус');
       }
-    } catch (error) {
-      setError('Произошла ошибка при обновлении статуса');
-    } finally {
-      setIsLoading(false);
-    }
+    });
   }
 
   return (
@@ -49,30 +45,33 @@ export function UpdateApplicationStatus({
         <Button
           color='green'
           variant={currentStatus === 'ACCEPTED' ? 'solid' : 'outline'}
-          disabled={isLoading || currentStatus === 'ACCEPTED'}
+          disabled={currentStatus === 'ACCEPTED'}
+          loading={isPending}
           onClick={() => updateApplicationStatus('ACCEPTED')}
         >
-          {isLoading && currentStatus !== 'ACCEPTED' ? <ReloadIcon /> : <CheckIcon />}
+          <CheckIcon />
           Принять
         </Button>
 
         <Button
           color='red'
           variant={currentStatus === 'REJECTED' ? 'solid' : 'outline'}
-          disabled={isLoading || currentStatus === 'REJECTED'}
+          disabled={currentStatus === 'REJECTED'}
+          loading={isPending}
           onClick={() => updateApplicationStatus('REJECTED')}
         >
-          {isLoading && currentStatus !== 'REJECTED' ? <ReloadIcon /> : <Cross2Icon />}
+          <Cross2Icon />
           Отклонить
         </Button>
 
         <Button
           color='gray'
           variant={currentStatus === 'PENDING' ? 'solid' : 'outline'}
-          disabled={isLoading || currentStatus === 'PENDING'}
+          disabled={currentStatus === 'PENDING'}
+          loading={isPending}
           onClick={() => updateApplicationStatus('PENDING')}
         >
-          {isLoading && currentStatus !== 'PENDING' ? <ReloadIcon /> : null}
+          <ReloadIcon />
           На рассмотрении
         </Button>
       </Flex>

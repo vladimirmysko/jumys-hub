@@ -226,7 +226,7 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
                         align='start'
                         style={{ width: '100%' }}
                       >
-                        <Flex direction='column' gap='2'>
+                        <Flex direction='column' gap='2' align='start'>
                           <Text size='2' weight='medium' highContrast>
                             {application.student.user.firstName} {application.student.user.lastName}
                           </Text>
