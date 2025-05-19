@@ -6,6 +6,7 @@ import { DataList, Flex, Heading, Link } from '@radix-ui/themes';
 
 import { ApplyForVacancyForm } from '@/components/vacancies/apply-for-vacancy-form';
 import { DeleteVacancyAlert } from '@/components/vacancies/delete-vacancy-alert';
+import { GetVacancyMatchReviewForm } from '@/components/vacancies/get-vacancy-match-review-form';
 
 import { verifySession } from '@/lib/session';
 import { prisma } from '@/lib/prisma';
@@ -36,7 +37,7 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
   });
 
   const isEmployer = user?.role === 'EMPLOYER';
-  const [vacancy, student, application] = await Promise.all([
+  const [vacancy, student, application, review] = await Promise.all([
     prisma.vacancy.findFirst({
       where: {
         id,
@@ -52,6 +53,14 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
       },
     }),
     prisma.application.findFirst({
+      where: {
+        vacancyId: id,
+        student: {
+          userId: session.sub,
+        },
+      },
+    }),
+    prisma.vacancyMatchingReview.findFirst({
       where: {
         vacancyId: id,
         student: {
@@ -146,6 +155,18 @@ export default async function VacancyPage({ params, searchParams }: VacancyPageP
             {vacancy.createdAt.toLocaleDateString('ru-RU', { dateStyle: 'long' })}
           </DataList.Value>
         </DataList.Item>
+        {!isEmployer && student && (
+          <DataList.Item>
+            <DataList.Label>Комментарии от ИИ</DataList.Label>
+            <DataList.Value>
+              {review ? (
+                review.comment
+              ) : (
+                <GetVacancyMatchReviewForm vacancyId={vacancy.id} studentId={student.id} />
+              )}
+            </DataList.Value>
+          </DataList.Item>
+        )}
       </DataList.Root>
 
       {canApply && <ApplyForVacancyForm vacancyId={vacancy.id} studentId={student.id} />}

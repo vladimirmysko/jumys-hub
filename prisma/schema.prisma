@@ -73,6 +73,7 @@ model Student {
 
   resume       Resume?
   applications Application[]
+  reviews      VacancyMatchingReview[]
 
   @@map("students")
 }
@@ -142,11 +143,12 @@ model Vacancy {
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   // Relations
-  employer     Employer      @relation(fields: [employerId], references: [id], onDelete: Cascade)
-  employerId   String        @map("employer_id")
-  category     Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId   String        @map("category_id")
+  employer     Employer                @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  employerId   String                  @map("employer_id")
+  category     Category                @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId   String                  @map("category_id")
   applications Application[]
+  reviews      VacancyMatchingReview[]
 
   @@index([employerId])
   @@map("vacancies")
@@ -171,4 +173,21 @@ model Application {
   @@index([vacancyId])
   @@index([status])
   @@map("applications")
+}
+
+model VacancyMatchingReview {
+  id        Int     @id @default(autoincrement())
+  comment   String  @db.Text
+  vacancy   Vacancy @relation(fields: [vacancyId], references: [id])
+  vacancyId String  @map("vacancy_id")
+  student   Student @relation(fields: [studentId], references: [id])
+  studentId String  @map("student_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([vacancyId, studentId]) // Prevent duplicate reviews for the same vacancy and student
+  @@index([vacancyId])
+  @@index([studentId])
+  @@map("vacancy_matching_reviews")
 }
