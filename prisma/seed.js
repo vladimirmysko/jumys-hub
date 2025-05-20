@@ -1,7 +1,30 @@
 const { PrismaClient, Role, JobType } = require('../src/generated/prisma');
 const bcrypt = require('bcryptjs');
+const { embed } = require('ai');
+const { openai } = require('@ai-sdk/openai');
 
 const prisma = new PrismaClient();
+
+const embeddingModel = openai.embedding('text-embedding-3-small');
+
+async function generateEmbedding(text) {
+  try {
+    const { embedding } = await embed({
+      model: embeddingModel,
+      value: text,
+    });
+    return embedding;
+  } catch (error) {
+    console.error('Error generating embedding:', error);
+    return null;
+  }
+}
+
+function getVacancyTextForEmbedding(vacancy) {
+  // Combine relevant fields for a comprehensive embedding
+  // Adjust based on your Vacancy model structure and what's most relevant
+  return `${vacancy.title} ${vacancy.description || ''} ${vacancy.skills}`.trim();
+}
 
 async function main() {
   console.log('Запуск заполнения базы данных...');
@@ -574,6 +597,27 @@ async function main() {
       },
     });
     console.log(`Создана вакансия: ${vacancy.title}`);
+
+    console.log(`Processing vacancy: ${vacancy.id} - ${vacancy.title}`);
+
+    const textToEmbed = getVacancyTextForEmbedding(vacancy);
+    const embedding = await generateEmbedding(textToEmbed);
+
+    if (embedding) {
+      try {
+        await prisma.vacancy.update({
+          where: { id: vacancy.id },
+          data: { embedding: embedding },
+        });
+        console.log(`  Successfully embedded vacancy: ${vacancy.id}`);
+      } catch (e) {
+        console.error(`  Failed to update vacancy ${vacancy.id} with embedding:`, e);
+      }
+    } else {
+      console.log(`  Failed to generate embedding for vacancy: ${vacancy.id}`);
+    }
+    // // Add a small delay to avoid rate limiting if processing many vacancies
+    // await new Promise((resolve) => setTimeout(resolve, 200));
   }
 
   console.log('Заполнение базы данных завершено успешно');

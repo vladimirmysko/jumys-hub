@@ -10,7 +10,6 @@ import { SelectCategory } from '@/components/select-category';
 import { SelectOrderBy } from '@/components/vacancies/select-order-by';
 import { VacanciesList } from '@/components/vacancies/vacancies-list';
 import { VacanciesListSkeleton } from '@/components/vacancies/vacancies-list-skeleton';
-import { loadSearchParams } from '@/components/vacancies/search-params';
 
 import { verifySession } from '@/lib/session';
 import { prisma } from '@/lib/prisma';
@@ -23,7 +22,6 @@ interface VacanciesPageProps {
 
 export default async function VacanciesPage({ searchParams }: VacanciesPageProps) {
   const session = await verifySession();
-  const { category } = await loadSearchParams(searchParams);
 
   const categories = await prisma.category.findMany({
     orderBy: {
@@ -42,6 +40,7 @@ export default async function VacanciesPage({ searchParams }: VacanciesPageProps
   });
 
   const isEmployer = user?.role === 'EMPLOYER';
+  const isStudent = user?.role === 'STUDENT';
 
   return (
     <Flex direction='column' gap='7' py='7'>
@@ -64,10 +63,10 @@ export default async function VacanciesPage({ searchParams }: VacanciesPageProps
       >
         <Search placeholder='Поиск вакансий' aria-label='Поиск вакансий' />
         <SelectCategory categories={categories} />
-        <SelectOrderBy />
+        <SelectOrderBy isStudent={isStudent} />
       </Flex>
 
-      <Suspense key={category} fallback={<VacanciesListSkeleton />}>
+      <Suspense fallback={<VacanciesListSkeleton />}>
         <VacanciesList
           searchParams={searchParams}
           employerOnly={isEmployer} // Show only employer's vacancies if they are an employer

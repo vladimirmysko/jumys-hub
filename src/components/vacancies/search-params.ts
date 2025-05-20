@@ -5,7 +5,7 @@ export const vacanciesSearchParams = {
   perPage: parseAsInteger.withDefault(10),
   category: parseAsString.withDefault('all').withOptions({ clearOnDefault: true }),
   search: parseAsString.withDefault(''),
-  orderBy: parseAsStringEnum(['desc', 'asc'])
+  orderBy: parseAsStringEnum(['desc', 'asc', 'relevance'])
     .withDefault('desc')
     .withOptions({ clearOnDefault: true }),
 };

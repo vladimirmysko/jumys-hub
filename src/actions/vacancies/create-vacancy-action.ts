@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 
 import { z } from 'zod';
 
+import { generateEmbedding, getVacancyTextForEmbedding } from '@/lib/ai/embeddings';
 import { prisma } from '@/lib/prisma';
 
 const createVacancyFormSchema = z.object({
@@ -59,7 +60,7 @@ export async function createVacancyAction(_prevState: unknown, formData: FormDat
       };
     }
 
-    await prisma.vacancy.create({
+    const newVacancy = await prisma.vacancy.create({
       data: {
         title: data.title,
         description: data.description,
@@ -71,6 +72,16 @@ export async function createVacancyAction(_prevState: unknown, formData: FormDat
         categoryId: data.categoryId,
       },
     });
+
+    const textToEmbed = getVacancyTextForEmbedding(newVacancy);
+    const embedding = await generateEmbedding(textToEmbed);
+
+    if (embedding) {
+      await prisma.vacancy.update({
+        where: { id: newVacancy.id },
+        data: { embedding: embedding },
+      });
+    }
 
     revalidatePath('/vacancies');
   } catch (error) {
