@@ -110,6 +110,36 @@ async function main() {
       major: 'Программная инженерия',
       graduationYear: 2026,
     },
+    {
+      username: 'student4',
+      email: 'student4@example.com',
+      password: 'password123',
+      firstName: 'Daniyar',
+      lastName: 'Serikov',
+      university: 'SDU',
+      major: 'Финансы',
+      graduationYear: 2025,
+    },
+    {
+      username: 'student5',
+      email: 'student5@example.com',
+      password: 'password123',
+      firstName: 'Madina',
+      lastName: 'Akhmetova',
+      university: 'KazGU',
+      major: 'Маркетинг',
+      graduationYear: 2024,
+    },
+    {
+      username: 'student6',
+      email: 'student6@example.com',
+      password: 'password123',
+      firstName: 'Timur',
+      lastName: 'Ibragimov',
+      university: 'Satbayev University',
+      major: 'Нефтегазовое дело',
+      graduationYear: 2026,
+    },
   ];
 
   for (const studentData of students) {
@@ -243,6 +273,15 @@ async function main() {
           jobType: JobType.FULL_TIME,
           employerId: employer.employer.id,
         },
+        {
+          title: 'Frontend-разработчик (Angular)',
+          description:
+            'Ищем талантливого Frontend-разработчика для создания современных пользовательских интерфейсов с использованием Angular.',
+          location: 'Алматы',
+          salary: '700 000 - 1 000 000 KZT',
+          jobType: JobType.FULL_TIME,
+          employerId: employer.employer.id,
+        },
       );
     } else if (employerData.username === 'kolesa') {
       vacancies.push(
@@ -264,6 +303,15 @@ async function main() {
           jobType: JobType.INTERNSHIP,
           employerId: employer.employer.id,
         },
+        {
+          title: 'Мобильный разработчик (Flutter)',
+          description:
+            'Разрабатывайте кроссплатформенные мобильные приложения для iOS и Android с использованием Flutter.',
+          location: 'Алматы',
+          salary: '750 000 - 1 150 000 KZT',
+          jobType: JobType.FULL_TIME,
+          employerId: employer.employer.id,
+        },
       );
     } else if (employerData.username === 'beeline') {
       vacancies.push(
@@ -283,6 +331,14 @@ async function main() {
           location: 'Нур-Султан',
           salary: '400 000 - 500 000 KZT',
           jobType: JobType.PART_TIME,
+          employerId: employer.employer.id,
+        },
+        {
+          title: 'Product Owner - Digital Services',
+          description: 'Возглавьте разработку и управление нашими цифровыми продуктами и услугами.',
+          location: 'Алматы',
+          salary: '900 000 - 1 400 000 KZT',
+          jobType: JobType.FULL_TIME,
           employerId: employer.employer.id,
         },
       );
@@ -360,6 +416,14 @@ async function main() {
           jobType: JobType.FULL_TIME,
           employerId: employer.employer.id,
         },
+        {
+          title: 'Авиационный инженер-стажер',
+          description: 'Получите практический опыт в обслуживании и инженерии воздушных судов.',
+          location: 'Алматы',
+          salary: '200 000 - 300 000 KZT',
+          jobType: JobType.INTERNSHIP,
+          employerId: employer.employer.id,
+        },
       );
     } else if (employerData.username === 'halykbank') {
       vacancies.push(
@@ -390,6 +454,15 @@ async function main() {
           jobType: JobType.INTERNSHIP,
           employerId: employer.employer.id,
         },
+        {
+          title: 'Data Scientist - Risk Management',
+          description:
+            'Разрабатывайте модели машинного обучения для оценки и управления финансовыми рисками.',
+          location: 'Алматы',
+          salary: '1 000 000 - 1 500 000 KZT',
+          jobType: JobType.FULL_TIME,
+          employerId: employer.employer.id,
+        },
       );
     } else if (employerData.username === 'techgarden') {
       vacancies.push(
@@ -417,6 +490,14 @@ async function main() {
           location: 'Удаленно',
           salary: '700 000 - 900 000 KZT',
           jobType: JobType.REMOTE,
+          employerId: employer.employer.id,
+        },
+        {
+          title: 'Community Manager',
+          description: 'Создавайте и развивайте сообщество вокруг наших стартапов и мероприятий.',
+          location: 'Нур-Султан',
+          salary: '450 000 - 650 000 KZT',
+          jobType: JobType.FULL_TIME,
           employerId: employer.employer.id,
         },
       );
@@ -467,6 +548,14 @@ async function main() {
           jobType: JobType.INTERNSHIP,
           employerId: employer.id,
         },
+        {
+          title: 'Java Developer - Core Banking',
+          description: 'Разработка и поддержка основных банковских систем на Java.',
+          location: 'Алматы',
+          salary: '900 000 - 1 400 000 KZT',
+          jobType: JobType.FULL_TIME,
+          employerId: employer.id,
+        },
       );
     } else if (user.username === 'kolesa') {
       vacancies.push(
@@ -495,6 +584,14 @@ async function main() {
           location: 'Алматы',
           salary: '500 000 - 700 000 KZT',
           jobType: JobType.CONTRACT,
+          employerId: employer.id,
+        },
+        {
+          title: 'Android Developer (Kotlin)',
+          description: 'Разработка и поддержка Android-приложений для наших продуктов.',
+          location: 'Алматы',
+          salary: '800 000 - 1 200 000 KZT',
+          jobType: JobType.FULL_TIME,
           employerId: employer.id,
         },
       );
@@ -532,6 +629,14 @@ async function main() {
           location: 'Удаленно',
           salary: '900 000 - 1 300 000 KZT',
           jobType: JobType.REMOTE,
+          employerId: employer.id,
+        },
+        {
+          title: 'Big Data Engineer',
+          description: 'Проектирование, создание и поддержка нашей платформы больших данных.',
+          location: 'Алматы',
+          salary: '1 100 000 - 1 600 000 KZT',
+          jobType: JobType.FULL_TIME,
           employerId: employer.id,
         },
       );
